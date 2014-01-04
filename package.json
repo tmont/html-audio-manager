@@ -1,0 +1,18 @@
+{
+	"name": "html-audio-manager",
+	"version": "0.0.1",
+
+	"author": "Tommy Montgomery <tmont@tmont.com> (http://tmont.com/)",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tmont/html-audio-manager.git"
+	},
+
+	"scripts": {
+		"start": "./node_modules/.bin/serve -p 60023"
+	},
+
+	"devDependencies": {
+		"serve": "*"
+	}
+}
