@@ -2,7 +2,7 @@
 
 	function AudioManager(context) {
 		this.context = context || AudioManager.createContext();
-		this.files = {};
+		this.buffers = {};
 		this.sources = {};
 	}
 
@@ -21,15 +21,8 @@
 
 			req.onload = function() {
 				self.context.decodeAudioData(req.response, function(buffer) {
-					var file = {
-						name: options.name || url,
-						url: url,
-						buffer: buffer
-					};
-
-					self.files[file.name] = file;
-
-					callback && callback(null, file);
+					self.buffers[options.name || url] = buffer;
+					callback && callback(null, buffer);
 				}, callback);
 			};
 
@@ -53,27 +46,27 @@
 			}
 			options = options || {};
 
-			var file = this.files[name];
-			if (!file) {
-				this.load(name, function(err, file) {
+			var buffer = this.buffers[name];
+			if (!buffer) {
+				this.load(name, function(err, buffer) {
 					if (err) {
 						callback && callback(err);
 						return;
 					}
 
-					play(file);
+					play(buffer);
 				});
 			} else {
-				play(file);
+				play(buffer);
 			}
 
-			function play(file) {
+			function play(buffer) {
 				var source;
 				if (options.override && this.sources[name] && this.sources[name].length) {
 					source = this.sources[name][0];
 				} else {
 					source = self.context.createBufferSource();
-					source.buffer = file.buffer;
+					source.buffer = buffer;
 					source.connect(self.context.destination);
 				}
 
@@ -84,11 +77,11 @@
 				source.start(0);
 
 				if (!options.override) {
-					if (!self.sources[file.name]) {
-						self.sources[file.name] = [];
+					if (!self.sources[name]) {
+						self.sources[name] = [];
 					}
 
-					self.sources[file.name].push(source);
+					self.sources[name].push(source);
 				}
 
 				if (!options.persistent) {
