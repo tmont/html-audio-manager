@@ -42,7 +42,7 @@ manager.play('http://example.com/getoffmy.wav', { loop: true });
 ```
 
 Load a sound but don't play it yet (`play()` implicitly calls `load()`
-if the buffer has not already been loaded):
+if needed):
 ```javascript
 manager.load('http://example.com/getoffmy.wav', function(err, buffer) {
   //buffer is an AudioBuffer
