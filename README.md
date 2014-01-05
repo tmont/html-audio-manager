@@ -48,3 +48,24 @@ manager.load('http://example.com/getoffmy.wav', function(err, buffer) {
   //buffer is an AudioBuffer
 });
 
+By default, `AudioManager` will bind to the `onended` event and disconnect
+from the destination. You can keep the source around indefinitely by using
+the `persistent` option. This would be useful for short sounds that you use
+repeatedly, like a jumping sound effect in a platforming game.
+
+```javascript
+manager.play('http://example.com/getoffmy.wav', { persistent: true });
+```
+
+Using `persistent` should also be coupled with the `override` option,
+which will reuse the sound instead of playing the same sound. This would
+be necessary if the same sound should played multiple times simultaneously
+(such as the sound of a zombie dying, because you could probably kill
+more than one zombie at a time).
+
+```javascript
+manager.play('http://example.com/getoffmy.wav', { persistent: true, override: true });
+```
+
+The sources and buffers are exposed in `manager.buffers` and `manager.sources` if you
+have the need to do something to them directly (like bind to events).
