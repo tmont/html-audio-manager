@@ -13,6 +13,7 @@ web audio API is kind of cumbersome, and this fixes that.
 A little bit.
 
 ## Example
+[Clicky](http://tmont.github.io/html-audio-manager/)
 
 ## Usage
 Play a sound:
