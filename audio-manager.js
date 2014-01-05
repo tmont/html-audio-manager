@@ -102,7 +102,7 @@
 			} else {
 				var sources = this.sources[sourceOrName];
 				if (!sources || !sources.length) {
-					throw new Error('No sources for ' + sourceOrName);
+					return;
 				}
 
 				sources[0].stop(0);
