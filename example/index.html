@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>AudioContext Example</title>
+		<style type="text/css">
+			h1 {
+				margin: 0 0 10px 0;
+			}
+			.half {
+				float: left;
+				margin-right: 20px;
+			}
+		</style>
+		<link rel="stylesheet" href="http://dl.sunlightjs.com/latest/themes/sunlight.default.css"/>
+	</head>
+	<body>
+		<div class="half">
+			<h1>Let's Play Contra!</h1>
+			<button id="mp3" onclick="play('mp3')">Loop mp3</button>
+			<button id="ogg" onclick="play('ogg')">Loop ogg</button>
+			<button id="wav" onclick="play('wav')">Loop wav</button>
+
+			<p>
+				<strong>Note</strong>: Chrome doesn't support MP3.
+			</p>
+
+			<p>
+				<img src="./contra.png"/>
+			</p>
+
+			<p style="text-align: center">
+				doo doo doo doo dooo dooo doo
+			</p>
+		</div>
+
+		<div class="half">
+			<pre class="sunlight-highlight-javascript">
+var manager = new AudioManager();
+
+function play(type) {
+	var name = 'contra-cut.' + type;
+	manager.play(name, { loop: true }, function(err) {
+		if (!err) {
+			var el = document.getElementById(type);
+			el.innerHTML = 'Stop ' + type;
+			el.onclick = function() { stop(type); };
+		}
+	});
+}
+
+function stop(type) {
+	var name = 'contra-cut.' + type;
+	manager.stop(name);
+	var el = document.getElementById(type);
+	el.innerHTML = 'Loop ' + type;
+	el.onclick = function() { play(type); };
+}
+</pre>
+		</div>
+
+		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/sunlight-min.js"></script>
+		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/lang/sunlight.javascript-min.js"></script>
+		<script type="text/javascript">
+			Sunlight.highlightAll({ lineNumbers: false });
+		</script>
+		<script type="text/javascript" src="../audio-manager.js"></script>
+		<script type="text/javascript">
+			var manager = new AudioManager();
+
+			function play(type) {
+				var name = 'contra-cut.' + type;
+				manager.play(name, { loop: true }, function(err) {
+					if (!err) {
+						var el = document.getElementById(type);
+						el.innerHTML = 'Stop ' + type;
+						el.onclick = function() { stop(type); };
+					}
+				});
+			}
+
+			function stop(type) {
+				var name = 'contra-cut.' + type;
+				manager.stop(name, { destroy: true });
+				var el = document.getElementById(type);
+				el.innerHTML = 'Loop ' + type;
+				el.onclick = function() { play(type); };
+			}
+		</script>
+	</body>
+</html>
