@@ -50,15 +50,15 @@ manager.loadAll(function(err) {
 		var el = document.getElementById(type);
 		return function() {
 			manager.play(type, { loop: true });
-			el.innerHTML = 'Stop ' + type;
-			el.onclick = stop(type);
+			el.innerHTML = 'Pause ' + type;
+			el.onclick = pause(type);
 		};
 	}
 
-	function stop(type) {
+	function pause(type) {
 		var el = document.getElementById(type);
 		return function() {
-			manager.stop(type);
+			manager.pause(type);
 			el.innerHTML = 'Play ' + type;
 			el.onclick = play(type);
 		};
