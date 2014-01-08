@@ -17,7 +17,9 @@
 		this.name = options.name || path;
 		this.buffer = null;
 		this.context = options.context || createContext();
-		this.sources = [];
+		this.source = null;
+		this.offset = 0;
+		this.startedAt = 0;
 		this.events = {
 			play: [],
 			stop: [],
@@ -50,9 +52,12 @@
 		},
 
 		destroy: function() {
-			for (var i = 0; i < this.sources.length; i++) {
-				this.sources[i].disconnect();
+			if (!this.source) {
+				return;
 			}
+
+			this.source.disconnect();
+			this.source = null;
 		},
 
 		play: function(options) {
@@ -71,29 +76,53 @@
 			}
 
 			function play() {
-				var source = self.context.createBufferSource();
-				source.buffer = self.buffer;
-				source.connect(self.context.destination);
-				self.sources.push(source);
+				self.destroy();
+				self.source = self.context.createBufferSource();
+				self.source.buffer = self.buffer;
+				self.source.connect(self.context.destination);
 
-				if (options.loop) {
-					source.loop = true;
-				}
+				self.source.loop = !!options.loop;
+				var listeners = [];
+
 				if (options.onended) {
-					source.onended = options.onended;
+					listeners.push(options.onended);
 				}
 
-				source.start(0);
-				self.emit('play', source);
+				self.source.onended = function() {
+					for (var i = 0; i < listeners.length; i++) {
+						listeners[i].apply(null, arguments);
+					}
+				};
+
+				self.source.start(0, self.offset);
+				self.startedAt = Date.now();
+				self.looping = self.source.loop;
+				self.emit('play');
+			}
+		},
+
+		pause: function() {
+			if (this.source) {
+				this.source.stop(0);
+				this.offset = (Date.now() - this.startedAt) / 1000;
+
+				//handle looping offsets
+				while (this.offset >= this.buffer.duration) {
+					this.offset -= this.buffer.duration;
+				}
+
+				this.destroy();
+				this.startedAt = 0;
 			}
 		},
 
 		stop: function() {
-			for (var i = 0; i < this.sources.length; i++) {
-				this.sources[i].stop(0);
+			if (this.source) {
+				this.source.stop(0);
+				this.destroy();
+				this.offset = 0;
+				this.emit('stop');
 			}
-
-			this.emit('stop');
 		},
 
 		on: function(event, listener) {
@@ -193,6 +222,21 @@
 		stopAll: function() {
 			for (var key in this.files) {
 				this.files[key].stop();
+			}
+		},
+
+		pause: function(name) {
+			var file = this.files[name];
+			if (!file) {
+				throw new Error('Unknown file ' + name);
+			}
+
+			file.pause();
+		},
+
+		pauseAll: function() {
+			for (var key in this.files) {
+				this.files[key].pause();
 			}
 		}
 	};
