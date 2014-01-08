@@ -1,121 +1,6 @@
 (function(window) {
 
-	function AudioManager(context) {
-		this.context = context || AudioManager.createContext();
-		this.buffers = {};
-		this.sources = {};
-	}
-
-	AudioManager.prototype = {
-		load: function(url, options, callback) {
-			if (typeof(options) === 'function') {
-				callback = options;
-				options = {};
-			}
-			options = options || {};
-
-			var req = new XMLHttpRequest(),
-				self = this;
-			req.open('GET', url, true);
-			req.responseType = 'arraybuffer';
-
-			req.onload = function() {
-				self.context.decodeAudioData(req.response, function(buffer) {
-					self.buffers[options.name || url] = buffer;
-					callback && callback(null, buffer);
-				}, callback);
-			};
-
-			req.send(null);
-		},
-
-		destroySource: function(source, name) {
-			source.disconnect();
-			var index = this.sources[name].indexOf(source);
-			if (index >= 0) {
-				this.sources[name].splice(index, 1);
-			}
-		},
-
-		play: function(name, options, callback) {
-			var self = this;
-
-			if (typeof(options) === 'function') {
-				callback = options;
-				options = {};
-			}
-			options = options || {};
-
-			var buffer = this.buffers[name];
-			if (!buffer) {
-				this.load(name, function(err, buffer) {
-					if (err) {
-						callback && callback(err);
-						return;
-					}
-
-					play(buffer);
-				});
-			} else {
-				play(buffer);
-			}
-
-			function play(buffer) {
-				var source;
-				if (options.override && this.sources[name] && this.sources[name].length) {
-					source = this.sources[name][0];
-				} else {
-					source = self.context.createBufferSource();
-					source.buffer = buffer;
-					source.connect(self.context.destination);
-				}
-
-				if (options.loop) {
-					source.loop = true;
-				}
-
-				source.start(0);
-
-				if (!options.override) {
-					if (!self.sources[name]) {
-						self.sources[name] = [];
-					}
-
-					self.sources[name].push(source);
-				}
-
-				if (!options.persistent) {
-					source.onended = function() {
-						self.destroySource(source, name);
-					};
-				}
-
-				callback && callback(null, source);
-			}
-		},
-
-		stop: function(sourceOrName, options) {
-			options = options || {};
-
-			if (sourceOrName.stop) {
-				sourceOrName.stop(0);
-			} else {
-				var sources = this.sources[sourceOrName];
-				if (!sources || !sources.length) {
-					return;
-				}
-
-				sources[0].stop(0);
-				if (options.all) {
-					for (var i = 1; i < sources.length; i++) {
-						sources[i].stop(0);
-					}
-				}
-			}
-		}
-	};
-
-	AudioManager.createContext = function() {
+	function createContext() {
 		if (window.AudioContext) {
 			return new window.AudioContext();
 		}
@@ -124,8 +9,195 @@
 		}
 
 		throw new Error('Your browser doesn\'t support AudioContext');
+	}
+
+	function AudioFile(path, options) {
+		options = options || {};
+		this.path = path;
+		this.name = options.name || path;
+		this.buffer = null;
+		this.context = options.context || createContext();
+		this.sources = [];
+		this.events = {
+			play: [],
+			stop: [],
+			load: []
+		};
+	}
+
+	AudioFile.prototype = {
+		load: function(callback) {
+			if (this.buffer) {
+				//already loaded
+				callback(null, this);
+				return;
+			}
+
+			var req = new XMLHttpRequest(),
+				self = this;
+			req.open('GET', this.path, true);
+			req.responseType = 'arraybuffer';
+
+			req.onload = function() {
+				self.context.decodeAudioData(req.response, function(buffer) {
+					self.buffer = buffer;
+					self.emit('load', buffer);
+					callback && callback(null, self);
+				}, callback);
+			};
+
+			req.send(null);
+		},
+
+		destroy: function() {
+			for (var i = 0; i < this.sources.length; i++) {
+				this.sources[i].disconnect();
+			}
+		},
+
+		play: function(options) {
+			options = options || {};
+			var self = this;
+			if (!this.buffer) {
+				this.load(function(err) {
+					if (err) {
+						throw err;
+					}
+
+					play();
+				});
+			} else {
+				play();
+			}
+
+			function play() {
+				var source = self.context.createBufferSource();
+				source.buffer = self.buffer;
+				source.connect(self.context.destination);
+				self.sources.push(source);
+
+				if (options.loop) {
+					source.loop = true;
+				}
+				if (options.onended) {
+					source.onended = options.onended;
+				}
+
+				source.start(0);
+				self.emit('play', source);
+			}
+		},
+
+		stop: function() {
+			for (var i = 0; i < this.sources.length; i++) {
+				this.sources[i].stop(0);
+			}
+
+			this.emit('stop');
+		},
+
+		on: function(event, listener) {
+			if (!this.events[event]) {
+				return;
+			}
+
+			this.events[event].push(listener);
+		},
+
+		emit: function(event, args) {
+			var listeners = this.events[event];
+			if (!listeners) {
+				return;
+			}
+			for (var i = 0; i < listeners.length; i++) {
+				listeners[i].apply(this, args);
+			}
+		}
 	};
 
-	window.AudioManager = AudioManager;
+	function AudioFileManager(files, options) {
+		options = options || {};
+		this.maxRequests = options.maxRequests || 5;
+		this.files = {};
+		if (Array.isArray(files)) {
+			for (var i = 0; i < files.length; i++) {
+				this.files[files[i].name] = files[i];
+			}
+		} else {
+			this.files = files;
+		}
+	}
+
+	AudioFileManager.prototype = {
+		loadAll: function(callback) {
+			var active = 0,
+				maxRequests = this.maxRequests,
+				complete = 0,
+				responseSent = false,
+				keys = Object.keys(this.files),
+				expected = keys.length;
+
+			function loadFile(file, next) {
+				if (active > maxRequests) {
+					window.setTimeout(function() {
+						loadFile(file, next);
+					}, 50);
+				} else {
+					active++;
+					file.load(function(err) {
+						active--;
+						complete++;
+						next(err);
+					});
+				}
+			}
+
+			for (var i = 0; i < keys.length; i++) {
+				loadFile(this.files[keys[i]], function(err) {
+					if (responseSent) {
+						return;
+					}
+
+					if (err) {
+						responseSent = true;
+						callback(err);
+						return;
+					}
+
+					if (complete === expected) {
+						responseSent = true;
+						callback();
+					}
+				});
+			}
+		},
+
+		play: function(name, options) {
+			var file = this.files[name];
+			if (!file) {
+				throw new Error('Unknown file ' + name);
+			}
+
+			file.play(options);
+		},
+
+		stop: function(name) {
+			var file = this.files[name];
+			if (!file) {
+				throw new Error('Unknown file ' + name);
+			}
+
+			file.stop();
+		},
+
+		stopAll: function() {
+			for (var key in this.files) {
+				this.files[key].stop();
+			}
+		}
+	};
+
+	window.AudioFile = AudioFile;
+	window.AudioFileManager = AudioFileManager;
 
 }(window));
