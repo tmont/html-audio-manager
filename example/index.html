@@ -19,6 +19,7 @@
 			<button id="mp3">Loading&hellip;</button>
 			<button id="ogg">Loading&hellip;</button>
 			<button id="wav">Loading&hellip;</button>
+			<button id="galaxy">Loading&hellip;</button>
 
 			<p>
 				<strong>Note</strong>: Chrome doesn't support MP3.
@@ -36,6 +37,7 @@
 		<div class="half">
 			<pre class="sunlight-highlight-javascript">
 var manager = new AudioFileManager({
+	galaxy: new AudioFile('all-around-the-galaxy-cut.ogg'),
 	wav: new AudioFile('contra-cut.wav'),
 	ogg: new AudioFile('contra-cut.ogg'),
 	mp3: new AudioFile('contra-cut.mp3')
@@ -64,7 +66,7 @@ manager.loadAll(function(err) {
 		};
 	}
 
-	[ 'mp3', 'wav', 'ogg' ].forEach(function(type) {
+	[ 'mp3', 'wav', 'ogg', 'galaxy' ].forEach(function(type) {
 		var el = document.getElementById(type);
 		el.innerHTML = 'Play ' + type;
 		el.onclick = play(type);
@@ -81,6 +83,7 @@ manager.loadAll(function(err) {
 		<script type="text/javascript" src="../audio-manager.js"></script>
 		<script type="text/javascript">
 			var manager = new AudioFileManager({
+				galaxy: new AudioFile('all-around-the-galaxy-cut.ogg'),
 				wav: new AudioFile('contra-cut.wav'),
 				ogg: new AudioFile('contra-cut.ogg'),
 				mp3: new AudioFile('contra-cut.mp3')
@@ -109,7 +112,7 @@ manager.loadAll(function(err) {
 					};
 				}
 
-				[ 'mp3', 'wav', 'ogg' ].forEach(function(type) {
+				[ 'mp3', 'wav', 'ogg', 'galaxy' ].forEach(function(type) {
 					var el = document.getElementById(type);
 					el.innerHTML = 'Play ' + type;
 					el.onclick = play(type);
