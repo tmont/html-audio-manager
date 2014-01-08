@@ -104,7 +104,7 @@
 		pause: function() {
 			if (this.source) {
 				this.source.stop(0);
-				this.offset = (Date.now() - this.startedAt) / 1000;
+				this.offset += (Date.now() - this.startedAt) / 1000;
 
 				//handle looping offsets
 				while (this.offset >= this.buffer.duration) {
@@ -112,7 +112,6 @@
 				}
 
 				this.destroy();
-				this.startedAt = 0;
 			}
 		},
 
