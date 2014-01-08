@@ -82,17 +82,9 @@
 				self.source.connect(self.context.destination);
 
 				self.source.loop = !!options.loop;
-				var listeners = [];
-
 				if (options.onended) {
-					listeners.push(options.onended);
+					self.source.addEventListener('ended', options.onended);
 				}
-
-				self.source.onended = function() {
-					for (var i = 0; i < listeners.length; i++) {
-						listeners[i].apply(null, arguments);
-					}
-				};
 
 				self.source.start(0, self.offset);
 				self.startedAt = Date.now();
