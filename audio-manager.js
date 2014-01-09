@@ -100,28 +100,27 @@
 				self.startedAt = Date.now();
 				self.emit('play');
 				self.playingId = window.setInterval(function() {
-					var currentTime = self.offset + ((Date.now() - self.startedAt) / 1000);
-
-					//handle looping offsets
-					while (currentTime >= self.buffer.duration) {
-						currentTime -= self.buffer.duration;
-					}
-					self.emit('playing', [ currentTime, self.buffer.duration ]);
+					self.emit('playing', [ self.getCurrentTime(), self.buffer.duration ]);
 				}, 500);
 			}
+		},
+
+		getCurrentTime: function() {
+			var currentTime = this.offset + ((Date.now() - this.startedAt) / 1000);
+
+			//handle looping offsets
+			while (currentTime >= this.buffer.duration) {
+				currentTime -= this.buffer.duration;
+			}
+
+			return currentTime;
 		},
 
 		pause: function() {
 			if (this.source) {
 				this.source.stop(0);
 				this.playing = false;
-				this.offset += (Date.now() - this.startedAt) / 1000;
-
-				//handle looping offsets
-				while (this.offset >= this.buffer.duration) {
-					this.offset -= this.buffer.duration;
-				}
-
+				this.offset = this.getCurrentTime();
 				this.destroy();
 			}
 		},
