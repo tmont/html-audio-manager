@@ -41,7 +41,8 @@
 			req.responseType = 'arraybuffer';
 
 			req.onload = function() {
-				self.context.decodeAudioData(req.response, function(buffer) {
+				self.raw = req.response;
+				self.context.decodeAudioData(self.raw, function(buffer) {
 					self.buffer = buffer;
 					self.emit('load', buffer);
 					callback && callback(null, self);
@@ -139,6 +140,9 @@
 		options = options || {};
 		this.maxRequests = options.maxRequests || 5;
 		this.files = {};
+		this.events = {
+			load: []
+		};
 		if (Array.isArray(files)) {
 			for (var i = 0; i < files.length; i++) {
 				this.files[files[i].name] = files[i];
@@ -153,6 +157,7 @@
 			var active = 0,
 				maxRequests = this.maxRequests,
 				complete = 0,
+				self = this,
 				responseSent = false,
 				keys = Object.keys(this.files),
 				expected = keys.length;
@@ -167,6 +172,9 @@
 					file.load(function(err) {
 						active--;
 						complete++;
+						if (!err) {
+							self.emit('load', file);
+						}
 						next(err);
 					});
 				}
@@ -228,6 +236,24 @@
 		pauseAll: function() {
 			for (var key in this.files) {
 				this.files[key].pause();
+			}
+		},
+
+		on: function(event, listener) {
+			if (!this.events[event]) {
+				return;
+			}
+
+			this.events[event].push(listener);
+		},
+
+		emit: function(event, args) {
+			var listeners = this.events[event];
+			if (!listeners) {
+				return;
+			}
+			for (var i = 0; i < listeners.length; i++) {
+				listeners[i].apply(this, args);
 			}
 		}
 	};

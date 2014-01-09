@@ -3,84 +3,22 @@
 	<head>
 		<title>AudioContext Example</title>
 		<style type="text/css">
-			h1 {
-				margin: 0 0 10px 0;
-			}
-			.half {
-				float: left;
-				margin-right: 20px;
-			}
 		</style>
 		<link rel="stylesheet" href="http://dl.sunlightjs.com/latest/themes/sunlight.default.css"/>
+		<link rel="stylesheet" href="../audio-manager.css"/>
 	</head>
 	<body>
-		<div class="half">
-			<h1>Let's Play Contra!</h1>
-			<button id="mp3">Loading&hellip;</button>
-			<button id="ogg">Loading&hellip;</button>
-			<button id="wav">Loading&hellip;</button>
-			<button id="galaxy">Loading&hellip;</button>
-
-			<p>
-				<strong>Note</strong>: Chrome doesn't support MP3.
-			</p>
-
-			<p>
-				<img src="./contra.png"/>
-			</p>
-
-			<p style="text-align: center">
-				doo doo doo doo dooo dooo doo
-			</p>
-		</div>
-
-		<div class="half">
-			<pre class="sunlight-highlight-javascript">
-var manager = new AudioFileManager({
-	galaxy: new AudioFile('all-around-the-galaxy-cut.ogg'),
-	wav: new AudioFile('contra-cut.wav'),
-	ogg: new AudioFile('contra-cut.ogg'),
-	mp3: new AudioFile('contra-cut.mp3')
-});
-
-manager.loadAll(function(err) {
-	if (err) {
-		throw err;
-	}
-
-	function play(type) {
-		var el = document.getElementById(type);
-		return function() {
-			manager.play(type, { loop: true });
-			el.innerHTML = 'Pause ' + type;
-			el.onclick = pause(type);
-		};
-	}
-
-	function pause(type) {
-		var el = document.getElementById(type);
-		return function() {
-			manager.pause(type);
-			el.innerHTML = 'Play ' + type;
-			el.onclick = play(type);
-		};
-	}
-
-	[ 'mp3', 'wav', 'ogg', 'galaxy' ].forEach(function(type) {
-		var el = document.getElementById(type);
-		el.innerHTML = 'Play ' + type;
-		el.onclick = play(type);
-	});
-});
-</pre>
-		</div>
+		<div id="music-player"></div>
 
 		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/sunlight-min.js"></script>
 		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/lang/sunlight.javascript-min.js"></script>
 		<script type="text/javascript">
 			Sunlight.highlightAll({ lineNumbers: false });
 		</script>
+		<script type="text/javascript" src="../lib/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/audio-metadata.min.js"></script>
 		<script type="text/javascript" src="../audio-manager.js"></script>
+		<script type="text/javascript" src="../audio-manager-interface.js"></script>
 		<script type="text/javascript">
 			var manager = new AudioFileManager({
 				galaxy: new AudioFile('all-around-the-galaxy-cut.ogg'),
@@ -89,35 +27,7 @@ manager.loadAll(function(err) {
 				mp3: new AudioFile('contra-cut.mp3')
 			});
 
-			manager.loadAll(function(err) {
-				if (err) {
-					throw err;
-				}
-
-				function play(type) {
-					var el = document.getElementById(type);
-					return function() {
-						manager.play(type, { loop: true });
-						el.innerHTML = 'Pause ' + type;
-						el.onclick = pause(type);
-					};
-				}
-
-				function pause(type) {
-					var el = document.getElementById(type);
-					return function() {
-						manager.pause(type);
-						el.innerHTML = 'Play ' + type;
-						el.onclick = play(type);
-					};
-				}
-
-				[ 'mp3', 'wav', 'ogg', 'galaxy' ].forEach(function(type) {
-					var el = document.getElementById(type);
-					el.innerHTML = 'Play ' + type;
-					el.onclick = play(type);
-				});
-			});
+			$('#music-player').rach3({ manager: manager });
 		</script>
 	</body>
 </html>

@@ -1,0 +1,248 @@
+.box-sizing(@value) {
+	-moz-box-sizing: @value;
+	-webkit-box-sizing: @value;
+	box-sizing: @value;
+}
+
+.gradient-vertical-2(@color1, @color2, @stop1: 0%, @stop2: 100%) {
+	background-color: mix(@color1, @color2, 1);
+	background-image: -moz-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+	background-image: -webkit-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+	background-image: -ms-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+	background-image: -o-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+	background-image: linear-gradient(to bottom, @color1 @stop1, @color2 @stop2);
+}
+
+.transform(@transform) {
+	-moz-transform: @transform;
+	-webkit-transform: @transform;
+	-o-transform: @transform;
+	transform: @transform;
+}
+
+.transition(@transition) {
+	-moz-transition: @transition;
+	-webkit-transition: @transition;
+	transition: @transition;
+}
+
+@prefix: audio-manager-;
+
+.@{prefix}container {
+	@size: 1em;
+	@radius: (@size * .25);
+	@color: white;
+	position: relative;
+	width: (@size * 30);
+	color: @color;
+	background-color: #363636;
+	border-radius: @radius;
+	box-shadow: (@size * .25) (@size * .25) (@size * .25) fade(black, 40);
+
+	.@{prefix}info-container {
+		background-color: #242424;
+		height: (@size * 2.5);
+		border-radius: @radius;
+	}
+
+	.@{prefix}control-container {
+		@time-width: (@size * 5);
+		@button-width: (@size * 2);
+		@icon-color: darken(@color, 10%);
+		@icon-transparent: fade(@icon-color, 0);
+		@button-padding: (@size * .25);
+		@icon-opacity: 0.8;
+		border-radius: @radius;
+		@height: (@size * 2.5);
+		height: @height;
+		position: relative;
+
+		.@{prefix}play, .@{prefix}prev, .@{prefix}next, .@{prefix}volume, .@{prefix}pause {
+			width: @button-width;
+			height: @button-width;
+			position: relative;
+			overflow: hidden;
+			display: inline-block;
+			cursor: pointer;
+			margin: @button-padding; //using padding messes up the icons
+			opacity: @icon-opacity;
+			.transition(opacity 150ms);
+			&:hover {
+				opacity: 1;
+			}
+			span {
+				display: inline-block;
+			}
+		}
+
+		.@{prefix}play, .@{prefix}prev, .@{prefix}next, .@{prefix}pause {
+			float: left;
+		}
+
+		//http://cssdeck.com/labs/css3-monochrome-icon-set
+		.@{prefix}play {
+			span {
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-color: @icon-transparent @icon-transparent @icon-transparent @icon-color;
+				border-width: (@size * .5) (@size * .5) (@size * .5) (@size * .75);
+				margin: (@size * .5) 0 0 (@size * .75);
+			}
+		}
+		.@{prefix}pause {
+			span {
+				width: (@size * .125);
+				height: @size;
+				border: (@size * .25) solid @icon-color;
+				border-top: none;
+				border-bottom: none;
+				margin: (@size * .5) 0 0 (@size * .75);
+			}
+		}
+		.@{prefix}prev {
+			span {
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-color: @icon-transparent @icon-color @icon-transparent @icon-transparent;
+				border-width: (@size * .5) (@size * .75) (@size * .5) (@size * .5);
+				margin: (@size * .5) 0 0 (@size * -.125);
+				&:before {
+					content: '';
+					position: absolute;
+					background-color: @icon-color;
+					width: (@size * .25);
+					height: (@size * 1);
+					left: 0;
+					top: 0;
+					margin: (@size * .5) 0 0 (@size * .125);
+				}
+				&:after {
+					content: '';
+					position: absolute;
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-color: @icon-transparent @icon-color @icon-transparent @icon-transparent;
+					border-width: (@size * .5) (@size * .75) (@size * .5) (@size * .5);
+					margin: (@size * .5) 0 0 (@size * .625);
+					left: 0;
+					top: 0;
+				}
+			}
+		}
+		.@{prefix}next {
+			span {
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-color: @icon-transparent;
+				border-left-color: @icon-color;
+				border-width: (@size * .5) (@size * .5) (@size * .5) (@size * .75);
+				margin: (@size * .5) 0 0 (@size * .125);
+				&:before {
+					content: '';
+					position: absolute;
+					background-color: @icon-color;
+					width: (@size * .25);
+					height: (@size * 1);
+					left: 0;
+					top: 0;
+					margin: (@size * .5) 0 0 (@size * 1.625);
+				}
+				&:after {
+					content: '';
+					position: absolute;
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-color: @icon-transparent;
+					border-left-color: @icon-color;
+					border-width: (@size * .5) (@size * .5) (@size * .5) (@size * .75);
+					margin: (@size * .5) 0 0 (@size * .875);
+					left: 0;
+					top: 0
+				}
+			}
+		}
+		.@{prefix}volume {
+			float: right;
+			span {
+				width: (@size * .625);
+				height: (@size * .625);
+				background-color: @icon-color;
+				margin: (@size * .75) 0 0 (@size * .125);
+
+				&:after {
+					content: '';
+					position: absolute;
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-color: @icon-transparent;
+					border-right-color: @icon-color;
+					border-width: (@size * .75) (@size * 1) (@size * .75) (@size * .9375);
+					left: -(@size * .8125);
+					top: (@size * .3125);
+				}
+
+				&:before {
+					content: '';
+					position: absolute;
+					width: (@size * .3125);
+					height: (@size * .3125);
+					border-style: double;
+					border-color: @icon-color;
+					border-width: (@size * .5) (@size * .5) 0 0;
+					border-radius: 0 (@size * 3.125) 0 0;
+					.transform(rotate(45deg));
+					left: (@size * 1.1875);
+					top: (@size * .6875);
+				}
+			}
+		}
+
+		.@{prefix}progress-container {
+			@total-button-width: @button-width + (@button-padding * 2);
+			position: absolute;
+			top: 0;
+			right: (@time-width + @total-button-width) - 1.25;
+			left: (@total-button-width * 3);
+			bottom: 0;
+			margin: (@size * .25);
+			.@{prefix}progress {
+				@height: @size;
+				height: @height;
+				width: 100%;
+				position: absolute;
+				top: 50%;
+				margin-top: -(@height / 2);
+				.gradient-vertical-2(@icon-color, darken(@icon-color, 10%));
+				border-top-right-radius: @height;
+				border-bottom-right-radius: @height;
+				box-shadow: (@size * .05) (@size * .05) (@size * .1) fade(@icon-color, 50);
+				cursor: pointer;
+				opacity: @icon-opacity;
+				.transition(opacity 150ms);
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
+
+		.@{prefix}time {
+			width: @time-width;
+			color: @icon-color;
+			font-family: monospace;
+			text-align: center;
+			float: right;
+			height: 100%;
+			line-height: (@size * 3);
+			padding: (@size * .25);
+			text-shadow: (@size * .05) (@size * .05) (@size * .1) fade(@icon-color, 50);
+			.box-sizing(border-box);
+			cursor: default;
+		}
+	}
+}

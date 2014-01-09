@@ -1,0 +1,217 @@
+.audio-manager-container {
+  position: relative;
+  width: 30em;
+  color: #ffffff;
+  background-color: #363636;
+  border-radius: 0.25em;
+  box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.4);
+}
+.audio-manager-container .audio-manager-info-container {
+  background-color: #242424;
+  height: 2.5em;
+  border-radius: 0.25em;
+}
+.audio-manager-container .audio-manager-control-container {
+  border-radius: 0.25em;
+  height: 2.5em;
+  position: relative;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-play,
+.audio-manager-container .audio-manager-control-container .audio-manager-prev,
+.audio-manager-container .audio-manager-control-container .audio-manager-next,
+.audio-manager-container .audio-manager-control-container .audio-manager-volume,
+.audio-manager-container .audio-manager-control-container .audio-manager-pause {
+  width: 2em;
+  height: 2em;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0.25em;
+  opacity: 0.8;
+  -moz-transition: opacity 150ms;
+  -webkit-transition: opacity 150ms;
+  transition: opacity 150ms;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-play:hover,
+.audio-manager-container .audio-manager-control-container .audio-manager-prev:hover,
+.audio-manager-container .audio-manager-control-container .audio-manager-next:hover,
+.audio-manager-container .audio-manager-control-container .audio-manager-volume:hover,
+.audio-manager-container .audio-manager-control-container .audio-manager-pause:hover {
+  opacity: 1;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-play span,
+.audio-manager-container .audio-manager-control-container .audio-manager-prev span,
+.audio-manager-container .audio-manager-control-container .audio-manager-next span,
+.audio-manager-container .audio-manager-control-container .audio-manager-volume span,
+.audio-manager-container .audio-manager-control-container .audio-manager-pause span {
+  display: inline-block;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-play,
+.audio-manager-container .audio-manager-control-container .audio-manager-prev,
+.audio-manager-container .audio-manager-control-container .audio-manager-next,
+.audio-manager-container .audio-manager-control-container .audio-manager-pause {
+  float: left;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-play span {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0) rgba(230, 230, 230, 0) rgba(230, 230, 230, 0) #e6e6e6;
+  border-width: 0.5em 0.5em 0.5em 0.75em;
+  margin: 0.5em 0 0 0.75em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-pause span {
+  width: 0.125em;
+  height: 1em;
+  border: 0.25em solid #e6e6e6;
+  border-top: none;
+  border-bottom: none;
+  margin: 0.5em 0 0 0.75em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-prev span {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0) #e6e6e6 rgba(230, 230, 230, 0) rgba(230, 230, 230, 0);
+  border-width: 0.5em 0.75em 0.5em 0.5em;
+  margin: 0.5em 0 0 -0.125em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-prev span:before {
+  content: '';
+  position: absolute;
+  background-color: #e6e6e6;
+  width: 0.25em;
+  height: 1em;
+  left: 0;
+  top: 0;
+  margin: 0.5em 0 0 0.125em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-prev span:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0) #e6e6e6 rgba(230, 230, 230, 0) rgba(230, 230, 230, 0);
+  border-width: 0.5em 0.75em 0.5em 0.5em;
+  margin: 0.5em 0 0 0.625em;
+  left: 0;
+  top: 0;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-next span {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0);
+  border-left-color: #e6e6e6;
+  border-width: 0.5em 0.5em 0.5em 0.75em;
+  margin: 0.5em 0 0 0.125em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-next span:before {
+  content: '';
+  position: absolute;
+  background-color: #e6e6e6;
+  width: 0.25em;
+  height: 1em;
+  left: 0;
+  top: 0;
+  margin: 0.5em 0 0 1.625em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-next span:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0);
+  border-left-color: #e6e6e6;
+  border-width: 0.5em 0.5em 0.5em 0.75em;
+  margin: 0.5em 0 0 0.875em;
+  left: 0;
+  top: 0;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-volume {
+  float: right;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-volume span {
+  width: 0.625em;
+  height: 0.625em;
+  background-color: #e6e6e6;
+  margin: 0.75em 0 0 0.125em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-volume span:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0);
+  border-right-color: #e6e6e6;
+  border-width: 0.75em 1em 0.75em 0.9375em;
+  left: -0.8125em;
+  top: 0.3125em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-volume span:before {
+  content: '';
+  position: absolute;
+  width: 0.3125em;
+  height: 0.3125em;
+  border-style: double;
+  border-color: #e6e6e6;
+  border-width: 0.5em 0.5em 0 0;
+  border-radius: 0 3.125em 0 0;
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  left: 1.1875em;
+  top: 0.6875em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-progress-container {
+  position: absolute;
+  top: 0;
+  right: 6.25em;
+  left: 7.5em;
+  bottom: 0;
+  margin: 0.25em;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress {
+  height: 1em;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  background-color: #cccccc;
+  background-image: -moz-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: -webkit-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: -ms-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: -o-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: linear-gradient(to bottom, #e6e6e6 0%, #cccccc 100%);
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
+  box-shadow: 0.05em 0.05em 0.1em rgba(230, 230, 230, 0.5);
+  cursor: pointer;
+  opacity: 0.8;
+  -moz-transition: opacity 150ms;
+  -webkit-transition: opacity 150ms;
+  transition: opacity 150ms;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress:hover {
+  opacity: 1;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-time {
+  width: 5em;
+  color: #e6e6e6;
+  font-family: monospace;
+  text-align: center;
+  float: right;
+  height: 100%;
+  line-height: 3em;
+  padding: 0.25em;
+  text-shadow: 0.05em 0.05em 0.1em rgba(230, 230, 230, 0.5);
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: default;
+}
