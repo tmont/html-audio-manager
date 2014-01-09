@@ -26,6 +26,15 @@
 	transition: @transition;
 }
 
+.user-select(@value) {
+	-webkit-touch-callout: @value;
+	-webkit-user-select: @value;
+	-khtml-user-select: @value;
+	-moz-user-select: @value;
+	-ms-user-select: @value;
+	user-select: @value;
+}
+
 @prefix: audio-manager-;
 
 .@{prefix}container {
@@ -242,6 +251,7 @@
 			padding: (@size * .25);
 			text-shadow: (@size * .05) (@size * .05) (@size * .1) fade(@icon-color, 50);
 			.box-sizing(border-box);
+			.user-select(none);
 			cursor: default;
 		}
 	}
