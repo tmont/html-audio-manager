@@ -268,7 +268,8 @@
 				.gradient-vertical-2(@icon-color, darken(@icon-color, 10%));
 				opacity: @icon-opacity;
 				.transition(opacity 150ms);
-				width: 50%;
+				width: 0;
+				.transition(width 500ms linear);
 				&:hover {
 					opacity: 1;
 				}

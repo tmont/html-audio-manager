@@ -22,11 +22,13 @@
 		this.offset = 0;
 		this.startedAt = 0;
 		this.playing = false;
+		this.playingId = null;
 		this.metadata = null;
 		this.events = {
 			play: [],
 			stop: [],
-			load: []
+			load: [],
+			playing: []
 		};
 	}
 
@@ -63,6 +65,8 @@
 			this.source.disconnect();
 			this.source = null;
 			this.playing = false;
+			window.clearInterval(this.playingId);
+			this.playingId = null;
 		},
 
 		play: function(options) {
@@ -95,6 +99,15 @@
 				self.playing = true;
 				self.startedAt = Date.now();
 				self.emit('play');
+				self.playingId = window.setInterval(function() {
+					var currentTime = self.offset + ((Date.now() - self.startedAt) / 1000);
+
+					//handle looping offsets
+					while (currentTime >= self.buffer.duration) {
+						currentTime -= self.buffer.duration;
+					}
+					self.emit('playing', [ currentTime, self.buffer.duration ]);
+				}, 500);
 			}
 		},
 
@@ -147,16 +160,27 @@
 		this.maxRequests = options.maxRequests || 5;
 		this.files = {};
 		this.events = {
-			load: []
+			load: [],
+			playing: []
 		};
+
+		var self = this;
+		function listenToPlaying(file) {
+			file.on('playing', function() {
+				self.emit('playing', arguments);
+			});
+		}
+
 		if (Array.isArray(files)) {
 			for (var i = 0; i < files.length; i++) {
 				this.files[files[i].name] = files[i];
+				listenToPlaying(files[i]);
 			}
 		} else {
 			for (var key in files) {
 				files[key].name = key;
 				this.files[key] = files[key];
+				listenToPlaying(files[key]);
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 (function(window, document, $) {
 
-	var prefix = 'audio-manager-',
-		meta = window.AudioMetadata;
+	var prefix = 'audio-manager-';
 
 	function AudioManagerInterface($element, options) {
 		if (!options || typeof(options) !== 'object') {
@@ -12,9 +11,14 @@
 			throw new Error('An AudioManager must be passed to rach3');
 		}
 
+		var self = this;
+
 		this.$element = $element;
 		this.current = 0;
 		this.manager = options.manager;
+		this.manager.on('playing', function(time, duration) {
+			self.updateProgress(time, duration);
+		});
 		var files = options.manager.files;
 		this.files = Object.keys(files).map(function(name) {
 			return files[name];
@@ -102,6 +106,23 @@
 				data.artist && self.info.$artist.text(data.artist);
 				data.album && self.info.$album.text(data.album);
 			});
+		},
+
+		updateProgress: function(time, duration) {
+			if (duration <= 0) {
+				return;
+			}
+
+			function pad(s) {
+				return s < 10 ? '0' + s : s;
+			}
+
+			var percent = (time / duration) * 100,
+				minutes = Math.floor(time / 60),
+				seconds = Math.floor(time - (minutes * 60));
+
+			this.controls.$progress.width(percent + '%');
+			this.controls.$time.text(pad(minutes) + ':' + pad(seconds));
 		},
 
 		play: function() {
