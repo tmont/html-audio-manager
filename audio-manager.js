@@ -15,11 +15,14 @@
 		options = options || {};
 		this.path = path;
 		this.name = options.name || path;
+		this.raw = null;
 		this.buffer = null;
 		this.context = options.context || createContext();
 		this.source = null;
 		this.offset = 0;
 		this.startedAt = 0;
+		this.playing = false;
+		this.metadata = null;
 		this.events = {
 			play: [],
 			stop: [],
@@ -59,6 +62,7 @@
 
 			this.source.disconnect();
 			this.source = null;
+			this.playing = false;
 		},
 
 		play: function(options) {
@@ -88,8 +92,8 @@
 				}
 
 				self.source.start(0, self.offset);
+				self.playing = true;
 				self.startedAt = Date.now();
-				self.looping = self.source.loop;
 				self.emit('play');
 			}
 		},
@@ -97,6 +101,7 @@
 		pause: function() {
 			if (this.source) {
 				this.source.stop(0);
+				this.playing = false;
 				this.offset += (Date.now() - this.startedAt) / 1000;
 
 				//handle looping offsets
@@ -113,6 +118,7 @@
 				this.source.stop(0);
 				this.destroy();
 				this.offset = 0;
+				this.startedAt = 0;
 				this.emit('stop');
 			}
 		},
@@ -148,7 +154,10 @@
 				this.files[files[i].name] = files[i];
 			}
 		} else {
-			this.files = files;
+			for (var key in files) {
+				files[key].name = key;
+				this.files[key] = files[key];
+			}
 		}
 	}
 

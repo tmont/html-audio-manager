@@ -41,17 +41,41 @@
 	@size: 1em;
 	@radius: (@size * .25);
 	@color: white;
+	@bg-color: #363636;
+
 	position: relative;
 	width: (@size * 30);
 	color: @color;
-	background-color: #363636;
+
+	.gradient-vertical-2(lighten(@bg-color, 10%), darken(@bg-color, 10%));
 	border-radius: @radius;
 	box-shadow: (@size * .25) (@size * .25) (@size * .25) fade(black, 40);
 
 	.@{prefix}info-container {
-		background-color: #242424;
-		height: (@size * 2.5);
 		border-radius: @radius;
+		padding: (@size * .25);
+		min-height: (@size * 1.125);
+
+		&:after {
+			display: block;
+			content: "";
+			clear: both;
+		}
+
+		.@{prefix}track, .@{prefix}title {
+			float: left;
+			margin-right: (@size * .25);
+		}
+		.@{prefix}artist, .@{prefix}year {
+			float: right;
+			margin-left: (@size * .25);
+		}
+		.@{prefix}album {
+			display: none;
+		}
+		.@{prefix}track, .@{prefix}year {
+			opacity: 0.7;
+		}
 	}
 
 	.@{prefix}control-container {
@@ -61,10 +85,12 @@
 		@icon-transparent: fade(@icon-color, 0);
 		@button-padding: (@size * .25);
 		@icon-opacity: 0.8;
-		border-radius: @radius;
 		@height: (@size * 2.5);
+
+		border-radius: @radius;
 		height: @height;
 		position: relative;
+		clear: both;
 
 		.@{prefix}play, .@{prefix}prev, .@{prefix}next, .@{prefix}volume, .@{prefix}pause {
 			width: @button-width;
@@ -220,20 +246,29 @@
 			left: (@total-button-width * 3);
 			bottom: 0;
 			margin: (@size * .25);
-			.@{prefix}progress {
-				@height: @size;
-				height: @height;
-				width: 100%;
+
+			@progress-height: @size;
+			.@{prefix}progress-well, .@{prefix}progress {
+				height: @progress-height;
 				position: absolute;
 				top: 50%;
-				margin-top: -(@height / 2);
-				.gradient-vertical-2(@icon-color, darken(@icon-color, 10%));
-				border-top-right-radius: @height;
-				border-bottom-right-radius: @height;
-				box-shadow: (@size * .05) (@size * .05) (@size * .1) fade(@icon-color, 50);
+				border-radius: @radius;
 				cursor: pointer;
+			}
+			.@{prefix}progress-well {
+				@border-width: (@size * .02);
+				@actual-height: @progress-height + (@border-width * 2);
+				margin-top: -(@actual-height / 2);
+				.gradient-vertical-2(lighten(@bg-color, 7%), lighten(@bg-color, 2%));
+				border: @border-width solid lighten(@bg-color, 9%);
+				width: 100%;
+			}
+			.@{prefix}progress {
+				margin-top: -(@progress-height / 2);
+				.gradient-vertical-2(@icon-color, darken(@icon-color, 10%));
 				opacity: @icon-opacity;
 				.transition(opacity 150ms);
+				width: 50%;
 				&:hover {
 					opacity: 1;
 				}

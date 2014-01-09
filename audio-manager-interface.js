@@ -13,6 +13,7 @@
 		}
 
 		this.$element = $element;
+		this.current = 0;
 		this.manager = options.manager;
 		var files = options.manager.files;
 		this.files = Object.keys(files).map(function(name) {
@@ -23,6 +24,7 @@
 
 		this.$container = null;
 		this.controls = {};
+		this.info = {};
 		if (!options.noRender) {
 			this.render();
 		}
@@ -39,13 +41,32 @@
 				$infoContainer = $('<div/>').addClass(prefix + 'info-container'),
 				$progressContainer = $('<div/>').addClass(prefix + 'progress-container');
 
-			this.controls.$play = $('<div/>').addClass(prefix + 'play').appendTo($controlContainer);
+			$('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer);
+
+			this.controls.$play = $('<div/>')
+				.addClass(prefix + 'play')
+				.appendTo($controlContainer)
+				.click(function() {
+					var file = self.files[self.current];
+					if (file.playing) {
+						self.pause();
+					} else {
+						self.play();
+					}
+				});
+
 			this.controls.$prev = $('<div/>').addClass(prefix + 'prev').appendTo($controlContainer);
 			this.controls.$next = $('<div/>').addClass(prefix + 'next').appendTo($controlContainer);
 			this.controls.$volume = $('<div/>').addClass(prefix + 'volume').appendTo($controlContainer);
 			this.controls.$time = $('<div/>').addClass(prefix + 'time').appendTo($controlContainer);
 			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressContainer);
 			$progressContainer.appendTo($controlContainer);
+
+			this.info.$track = $('<div/>').addClass(prefix + 'track').appendTo($infoContainer);
+			this.info.$title = $('<div/>').addClass(prefix + 'title').appendTo($infoContainer);
+			this.info.$year = $('<div/>').addClass(prefix + 'year').appendTo($infoContainer);
+			this.info.$album = $('<div/>').addClass(prefix + 'album').appendTo($infoContainer);
+			this.info.$artist = $('<div/>').addClass(prefix + 'artist').appendTo($infoContainer);
 
 			var self = this;
 			[ 'play', 'prev', 'next', 'volume' ].forEach(function(button) {
@@ -56,15 +77,43 @@
 				.append($infoContainer, $controlContainer)
 				.appendTo(this.$element);
 
-			this.controls.$time.text('03:20');
+			this.controls.$time.text('00:00');
+			this.setInfo();
+		},
+
+		setInfo: function() {
+			var file = this.files[this.current],
+				self = this;
+
+			file.load(function(err) {
+				if (err) {
+					return;
+				}
+
+				if (!file.metadata) {
+					var method = /\.ogg$/.test(file.path) ? 'ogg' : 'id3v2';
+					file.metadata = window.AudioMetadata[method](file.raw);
+				}
+
+				var data = file.metadata;
+				data.title && self.info.$title.text(data.title);
+				data.year && self.info.$year.text(data.year);
+				data.tracknumber && self.info.$track.text(data.tracknumber);
+				data.artist && self.info.$artist.text(data.artist);
+				data.album && self.info.$album.text(data.album);
+			});
 		},
 
 		play: function() {
-
+			var file = this.files[this.current];
+			this.manager.play(file.name);
+			this.controls.$play.toggleClass(prefix + 'play ' + prefix + 'pause');
 		},
 
 		pause: function() {
-
+			var file = this.files[this.current];
+			this.manager.pause(file.name);
+			this.controls.$play.toggleClass(prefix + 'play ' + prefix + 'pause');
 		},
 
 		prev: function() {
@@ -83,6 +132,7 @@
 			this.$container.remove();
 			this.$container = null;
 			this.controls = {};
+			this.info = {};
 		}
 	};
 
