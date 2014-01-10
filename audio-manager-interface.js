@@ -48,9 +48,17 @@
 			this.$container = $('<div/>').addClass(prefix + 'container');
 			var $controlContainer = $('<div/>').addClass(prefix + 'control-container'),
 				$infoContainer = $('<div/>').addClass(prefix + 'info-container'),
-				$progressContainer = $('<div/>').addClass(prefix + 'progress-container');
+				$progressContainer = $('<div/>').addClass(prefix + 'progress-container'),
+				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer).click(seek);
 
-			$('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer);
+			function seek(e) {
+				var x = e.clientX + $(document).scrollLeft(),
+					realX = x - $progressWell.offset().left,
+					ratio = realX / $progressWell.width(),
+					timeToSeekTo = self.files[self.current].buffer.duration * ratio;
+
+				self.seek(timeToSeekTo);
+			}
 
 			this.controls.$play = $('<div/>')
 				.addClass(prefix + 'play')
@@ -78,7 +86,7 @@
 				});
 			this.controls.$volume = $('<div/>').addClass(prefix + 'volume').appendTo($controlContainer);
 			this.controls.$time = $('<div/>').addClass(prefix + 'time').appendTo($controlContainer);
-			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressContainer);
+			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressContainer).click(seek);
 			$progressContainer.appendTo($controlContainer);
 
 			this.info.$track = $('<div/>').addClass(prefix + 'track').appendTo($infoContainer);
@@ -145,6 +153,12 @@
 			}
 
 			$time[0].replaceChild(document.createTextNode(text), node);
+		},
+
+		seek: function(time) {
+			time = time || 0;
+			var file = this.files[this.current];
+			file.seek(time);
 		},
 
 		play: function() {

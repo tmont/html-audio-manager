@@ -130,6 +130,17 @@
 			}
 		},
 
+		seek: function(time) {
+			if (!this.source) {
+				return;
+			}
+
+			time = Math.min(this.buffer.duration, Math.max(0, time));
+			this.pause();
+			this.offset = time;
+			this.play();
+		},
+
 		stop: function() {
 			if (this.source) {
 				this.source.removeEventListener('ended', this.onFinished, false);
