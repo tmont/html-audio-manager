@@ -14,13 +14,17 @@
 		var self = this;
 
 		this.$element = $element;
-		this.current = 2;
+		this.current = 0;
 		this.manager = options.manager;
 		this.manager.on('playing', function(time, duration) {
 			self.updateProgress(time, duration);
 		});
 		this.manager.on('finish', function() {
-			self.stop();
+			if (self.files.length > 1) {
+				self.next();
+			} else {
+				self.stop();
+			}
 		});
 		var files = options.manager.files;
 		this.files = Object.keys(files).map(function(name) {
@@ -60,8 +64,18 @@
 					}
 				});
 
-			this.controls.$prev = $('<div/>').addClass(prefix + 'prev').appendTo($controlContainer);
-			this.controls.$next = $('<div/>').addClass(prefix + 'next').appendTo($controlContainer);
+			this.controls.$prev = $('<div/>')
+				.addClass(prefix + 'prev')
+				.appendTo($controlContainer)
+				.click(function() {
+					self.prev();
+				});
+			this.controls.$next = $('<div/>')
+				.addClass(prefix + 'next')
+				.appendTo($controlContainer)
+				.click(function() {
+					self.next();
+				});
 			this.controls.$volume = $('<div/>').addClass(prefix + 'volume').appendTo($controlContainer);
 			this.controls.$time = $('<div/>').addClass(prefix + 'time').appendTo($controlContainer);
 			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressContainer);
@@ -126,6 +140,7 @@
 
 		play: function() {
 			var file = this.files[this.current];
+			this.setInfo();
 			this.manager.play(file.name);
 			this.controls.$play.toggleClass(prefix + 'play ' + prefix + 'pause');
 		},
@@ -146,11 +161,15 @@
 		},
 
 		prev: function() {
-
+			this.stop();
+			this.current = (this.current - 1 + this.files.length) % this.files.length;
+			this.play();
 		},
 
 		next: function() {
-
+			this.stop();
+			this.current = (this.current + 1) % this.files.length;
+			this.play();
 		},
 
 		setVolume: function(value) {

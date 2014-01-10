@@ -135,10 +135,11 @@
 				this.source.removeEventListener('ended', this.onFinished, false);
 				this.source.stop(0);
 				this.destroy();
-				this.offset = 0;
-				this.startedAt = 0;
 				this.emit('stop');
 			}
+
+			this.offset = 0;
+			this.startedAt = 0;
 		},
 
 		on: function(event, listener) {
