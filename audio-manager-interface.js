@@ -14,17 +14,18 @@
 		var self = this;
 
 		this.$element = $element;
-		this.current = 0;
+		this.current = 2;
 		this.manager = options.manager;
 		this.manager.on('playing', function(time, duration) {
 			self.updateProgress(time, duration);
+		});
+		this.manager.on('finish', function() {
+			self.stop();
 		});
 		var files = options.manager.files;
 		this.files = Object.keys(files).map(function(name) {
 			return files[name];
 		});
-
-		//this.manager.on('load', $.proxy(this.addFile, this));
 
 		this.$container = null;
 		this.controls = {};
@@ -96,22 +97,20 @@
 
 				if (!file.metadata) {
 					var method = /\.ogg$/.test(file.path) ? 'ogg' : 'id3v2';
-					file.metadata = window.AudioMetadata[method](file.raw);
+					file.metadata = window.AudioMetadata[method](file.raw) || {};
 				}
 
 				var data = file.metadata;
 				data.title && self.info.$title.text(data.title);
 				data.year && self.info.$year.text(data.year);
-				data.tracknumber && self.info.$track.text(data.tracknumber);
+				data.track && self.info.$track.text(data.track);
 				data.artist && self.info.$artist.text(data.artist);
 				data.album && self.info.$album.text(data.album);
 			});
 		},
 
 		updateProgress: function(time, duration) {
-			if (duration <= 0) {
-				return;
-			}
+			duration = duration || 1;
 
 			function pad(s) {
 				return s < 10 ? '0' + s : s;
@@ -135,6 +134,15 @@
 			var file = this.files[this.current];
 			this.manager.pause(file.name);
 			this.controls.$play.toggleClass(prefix + 'play ' + prefix + 'pause');
+		},
+
+		stop: function() {
+			var file = this.files[this.current];
+			this.updateProgress(0);
+			this.manager.stop(file.name);
+			if (this.controls.$play.hasClass(prefix + 'pause')) {
+				this.controls.$play.toggleClass(prefix + 'pause ' + prefix + 'play');
+			}
 		},
 
 		prev: function() {

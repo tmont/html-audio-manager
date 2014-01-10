@@ -24,11 +24,18 @@
 		this.playing = false;
 		this.playingId = null;
 		this.metadata = null;
+		this.progressInterval = options.progressInterval || 100;
+		var self = this;
+		this.onFinished = function() {
+			self.destroy();
+			self.emit('finish');
+		};
 		this.events = {
 			play: [],
 			stop: [],
 			load: [],
-			playing: []
+			playing: [],
+			finish: []
 		};
 	}
 
@@ -91,9 +98,7 @@
 				self.source.connect(self.context.destination);
 
 				self.source.loop = !!options.loop;
-				if (options.onended) {
-					self.source.addEventListener('ended', options.onended);
-				}
+				self.source.addEventListener('ended', self.onFinished, false);
 
 				self.source.start(0, self.offset);
 				self.playing = true;
@@ -101,7 +106,7 @@
 				self.emit('play');
 				self.playingId = window.setInterval(function() {
 					self.emit('playing', [ self.getCurrentTime(), self.buffer.duration ]);
-				}, 500);
+				}, self.progressInterval);
 			}
 		},
 
@@ -118,8 +123,8 @@
 
 		pause: function() {
 			if (this.source) {
+				this.source.removeEventListener('ended', this.onFinished, false);
 				this.source.stop(0);
-				this.playing = false;
 				this.offset = this.getCurrentTime();
 				this.destroy();
 			}
@@ -127,6 +132,7 @@
 
 		stop: function() {
 			if (this.source) {
+				this.source.removeEventListener('ended', this.onFinished, false);
 				this.source.stop(0);
 				this.destroy();
 				this.offset = 0;
@@ -160,26 +166,30 @@
 		this.files = {};
 		this.events = {
 			load: [],
-			playing: []
+			playing: [],
+			finish: []
 		};
 
 		var self = this;
-		function listenToPlaying(file) {
-			file.on('playing', function() {
-				self.emit('playing', arguments);
+		function listen(file) {
+			file.on('playing', function(time, duration) {
+				self.emit('playing', [ time, duration, file ]);
+			});
+			file.on('finish', function() {
+				self.emit('finish', [ file ]);
 			});
 		}
 
 		if (Array.isArray(files)) {
 			for (var i = 0; i < files.length; i++) {
 				this.files[files[i].name] = files[i];
-				listenToPlaying(files[i]);
+				listen(files[i]);
 			}
 		} else {
 			for (var key in files) {
 				files[key].name = key;
 				this.files[key] = files[key];
-				listenToPlaying(files[key]);
+				listen(files[key]);
 			}
 		}
 	}
