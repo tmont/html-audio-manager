@@ -203,6 +203,36 @@
 		}
 		.@{prefix}volume {
 			float: right;
+			position: relative;
+			overflow: visible;
+
+			&.@{prefix}active {
+				opacity: 1;
+				.@{prefix}volume-control {
+					display: block;
+				}
+			}
+
+			.@{prefix}volume-control {
+				display: none;
+				position: absolute;
+				width: (@size * 5);
+				right: -(@size * 5);
+				height: @height - @button-padding;
+				.gradient-vertical-2(@bg-color, darken(@bg-color, 10%));
+				border-top-right-radius: @radius;
+				border-bottom-right-radius: @radius;
+				box-shadow: (@size * .25) (@size * .25) (@size * .25) fade(black, 40);
+				cursor: default;
+
+				input[type="range"] {
+					width: (@size * 5);
+					margin: 0;
+					position: relative;
+					top: .5em;
+				}
+			}
+
 			span {
 				width: (@size * .625);
 				height: (@size * .625);

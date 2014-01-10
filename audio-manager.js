@@ -18,12 +18,15 @@
 		this.raw = null;
 		this.buffer = null;
 		this.context = options.context || createContext();
+		this.gainNode = null;
 		this.source = null;
 		this.offset = 0;
 		this.startedAt = 0;
 		this.playing = false;
 		this.playingId = null;
 		this.metadata = null;
+		this.defaultVolume = options.defaultVolume || 1;
+		this.currentVolume = this.defaultVolume;
 		this.progressInterval = options.progressInterval || 100;
 		var self = this;
 		this.onFinished = function() {
@@ -71,6 +74,8 @@
 
 			this.source.disconnect();
 			this.source = null;
+			this.gainNode.disconnect();
+			this.gainNode = null;
 			this.playing = false;
 			window.clearInterval(this.playingId);
 			this.playingId = null;
@@ -93,9 +98,13 @@
 
 			function play() {
 				self.destroy();
+				self.gainNode = self.context.createGain();
+				self.gainNode.connect(self.context.destination);
+				self.setVolume(self.currentVolume);
+
 				self.source = self.context.createBufferSource();
 				self.source.buffer = self.buffer;
-				self.source.connect(self.context.destination);
+				self.source.connect(self.gainNode);
 
 				self.source.loop = !!options.loop;
 				self.source.addEventListener('ended', self.onFinished, false);
@@ -151,6 +160,16 @@
 
 			this.offset = 0;
 			this.startedAt = 0;
+		},
+
+		setVolume: function(value) {
+			if (!this.gainNode) {
+				return;
+			}
+
+			value = Math.max(0, Math.min(value, 1));
+			this.gainNode.gain.value = value;
+			this.currentVolume = value;
 		},
 
 		on: function(event, listener) {
@@ -264,33 +283,36 @@
 		},
 
 		stop: function(name) {
-			var file = this.files[name];
-			if (!file) {
-				throw new Error('Unknown file ' + name);
+			if (!name) {
+				for (var key in this.files) {
+					this.files[key].stop();
+				}
+				return;
 			}
 
-			file.stop();
-		},
-
-		stopAll: function() {
-			for (var key in this.files) {
-				this.files[key].stop();
-			}
+			this.files[name] && this.files[name].stop();
 		},
 
 		pause: function(name) {
-			var file = this.files[name];
-			if (!file) {
-				throw new Error('Unknown file ' + name);
+			if (!name) {
+				for (var key in this.files) {
+					this.files[key].pause();
+				}
+				return;
 			}
 
-			file.pause();
+			this.files[name] && this.files[name].pause();
 		},
 
-		pauseAll: function() {
-			for (var key in this.files) {
-				this.files[key].pause();
+		setVolume: function(value, name) {
+			if (!name) {
+				for (var key in this.files) {
+					this.files[key].setVolume(value);
+				}
+				return;
 			}
+
+			this.files[name] && this.files[name].setVolume(value);
 		},
 
 		on: function(event, listener) {

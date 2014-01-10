@@ -15,6 +15,7 @@
 
 		this.$element = $element;
 		this.current = 0;
+		this.currentVolume = 1;
 		this.manager = options.manager;
 		this.manager.on('playing', function(time, duration) {
 			self.updateProgress(time, duration);
@@ -75,16 +76,31 @@
 			this.controls.$prev = $('<div/>')
 				.addClass(prefix + 'prev')
 				.appendTo($controlContainer)
-				.click(function() {
-					self.prev();
-				});
+				.click(function() { self.prev(); });
 			this.controls.$next = $('<div/>')
 				.addClass(prefix + 'next')
 				.appendTo($controlContainer)
+				.click(function() { self.next(); });
+
+			this.controls.$volume = $('<div/>')
+				.addClass(prefix + 'volume')
+				.appendTo($controlContainer)
 				.click(function() {
-					self.next();
+					$(this).toggleClass(prefix + 'active');
 				});
-			this.controls.$volume = $('<div/>').addClass(prefix + 'volume').appendTo($controlContainer);
+
+			var $sliderContainer = $('<div/>').addClass(prefix + 'volume-control').appendTo(this.controls.$volume);
+
+			$('<input/>')
+				.attr({ type: 'range', value: 100, max: 100, min: 0 })
+				.appendTo($sliderContainer)
+				.on('input', function() {
+					var max = parseInt(this.max),
+						value = parseInt(this.value);
+
+					self.setVolume(Math.pow(value / max, 1.5));
+				});
+
 			this.controls.$time = $('<div/>').addClass(prefix + 'time').appendTo($controlContainer);
 			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressContainer).click(seek);
 			$progressContainer.appendTo($controlContainer);
@@ -165,6 +181,7 @@
 			var file = this.files[this.current];
 			this.setInfo();
 			this.manager.play(file.name);
+			this.setVolume(this.currentVolume);
 			this.controls.$play.toggleClass(prefix + 'play ' + prefix + 'pause');
 		},
 
@@ -196,7 +213,9 @@
 		},
 
 		setVolume: function(value) {
-
+			var file = this.files[this.current];
+			this.currentVolume = value;
+			this.manager.setVolume(value, file.name);
 		},
 
 		destroy: function() {
