@@ -135,7 +135,16 @@
 				seconds = Math.floor(time - (minutes * 60));
 
 			this.controls.$progress.width(percent + '%');
-			this.controls.$time.text(pad(minutes) + ':' + pad(seconds));
+
+			//since this can happen many times per second, let's micro-optimize it
+			var $time = this.controls.$time,
+				node = $time[0].firstChild,
+				text = pad(minutes) + ':' + pad(seconds);
+			if (node.nodeValue === text) {
+				return;
+			}
+
+			$time[0].replaceChild(document.createTextNode(text), node);
 		},
 
 		play: function() {
