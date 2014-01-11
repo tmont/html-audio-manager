@@ -17,7 +17,7 @@
 		this.current = 0;
 		this.currentVolume = 1;
 		this.manager = options.manager;
-		this.manager.on('playing', function(time, duration) {
+		this.manager.on('timeupdate', function(time, duration) {
 			self.updateProgress(time, duration);
 		});
 		this.manager.on('finish', function() {
@@ -56,7 +56,7 @@
 				var x = e.clientX + $(document).scrollLeft(),
 					realX = x - $progressWell.offset().left,
 					ratio = realX / $progressWell.width(),
-					timeToSeekTo = self.files[self.current].buffer.duration * ratio;
+					timeToSeekTo = self.files[self.current].getDuration() * ratio;
 
 				self.seek(timeToSeekTo);
 			}
@@ -66,7 +66,7 @@
 				.appendTo($controlContainer)
 				.click(function() {
 					var file = self.files[self.current];
-					if (file.playing) {
+					if (file.isPlaying()) {
 						self.pause();
 					} else {
 						self.play();
@@ -128,22 +128,16 @@
 			var file = this.files[this.current],
 				self = this;
 
-			file.load(function(err) {
+			file.getMetadata(function(err, metadata) {
 				if (err) {
 					return;
 				}
 
-				if (!file.metadata) {
-					var method = /\.ogg$/.test(file.path) ? 'ogg' : 'id3v2';
-					file.metadata = window.AudioMetadata[method](file.raw) || {};
-				}
-
-				var data = file.metadata;
-				data.title && self.info.$title.text(data.title);
-				data.year && self.info.$year.text(data.year);
-				data.track && self.info.$track.text(data.track);
-				data.artist && self.info.$artist.text(data.artist);
-				data.album && self.info.$album.text(data.album);
+				metadata.title && self.info.$title.text(metadata.title);
+				metadata.year && self.info.$year.text(metadata.year);
+				metadata.track && self.info.$track.text(metadata.track);
+				metadata.artist && self.info.$artist.text(metadata.artist);
+				metadata.album && self.info.$album.text(metadata.album);
 			});
 		},
 

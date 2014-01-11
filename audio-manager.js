@@ -15,160 +15,111 @@
 		options = options || {};
 		this.path = path;
 		this.name = options.name || path;
-		this.raw = null;
-		this.buffer = null;
-		this.context = options.context || createContext();
-		this.gainNode = null;
-		this.source = null;
 		this.offset = 0;
-		this.startedAt = 0;
-		this.playing = false;
-		this.playingId = null;
 		this.metadata = null;
+		this.playing = false;
+		this.audio = new Audio(path);
+
 		this.defaultVolume = options.defaultVolume || 1;
 		this.currentVolume = this.defaultVolume;
-		this.progressInterval = options.progressInterval || 100;
-		var self = this;
-		this.onFinished = function() {
-			self.destroy();
-			self.emit('finish');
-		};
+
 		this.events = {
 			play: [],
 			stop: [],
-			load: [],
-			playing: [],
+			timeupdate: [],
 			finish: []
 		};
+
+		var self = this;
+		this.onFinished = function() {
+			self.audio.removeEventListener('ended', self.onFinished);
+			self.emit('finish');
+		};
+
+		this.onTimeUpdate = function() {
+			self.emit('timeupdate', [ self.getCurrentTime(), self.getDuration() ]);
+		};
+
+		this.audio.addEventListener('timeupdate', this.onTimeUpdate);
+		this.audio.addEventListener('playing', function() {
+			self.playing = true;
+		});
+		this.audio.addEventListener('ended', function() {
+			self.playing = false;
+		});
 	}
 
 	AudioFile.prototype = {
-		load: function(callback) {
-			if (this.buffer) {
-				//already loaded
-				callback(null, this);
+		getMetadata: function(callback) {
+			if (this.metadata) {
+				callback(null, this.metadata);
 				return;
 			}
 
-			var req = new XMLHttpRequest(),
-				self = this;
-			req.open('GET', this.path, true);
-			req.responseType = 'arraybuffer';
+			var self = this;
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', this.path, true);
+			xhr.responseType = 'arraybuffer';
+			xhr.setRequestHeader('Range', 'bytes=0-300');
+			xhr.addEventListener('readystatechange', function(e) {
+				if (xhr.readyState === 4) {
+					if (xhr.status >= 200 && xhr.status < 300) {
+						var type = /\.ogg$/.test(self.path) ? 'ogg' : 'id3v2';
+						self.metadata = window.AudioMetadata[type](xhr.response);
+						callback(null, self.metadata);
+					} else {
+						callback(xhr);
+					}
+				}
+			});
 
-			req.onload = function() {
-				self.raw = req.response;
-				self.context.decodeAudioData(self.raw, function(buffer) {
-					self.buffer = buffer;
-					self.emit('load', buffer);
-					callback && callback(null, self);
-				}, callback);
-			};
-
-			req.send(null);
+			xhr.send(null);
 		},
 
-		destroy: function() {
-			if (!this.source) {
-				return;
-			}
+		getCurrentTime: function() {
+			return this.audio.currentTime;
+		},
 
-			this.source.disconnect();
-			this.source = null;
-			this.gainNode.disconnect();
-			this.gainNode = null;
-			this.playing = false;
-			window.clearInterval(this.playingId);
-			this.playingId = null;
+		getDuration: function() {
+			return this.audio.duration;
+		},
+
+		isPlaying: function() {
+			return this.playing;
 		},
 
 		play: function(options) {
 			options = options || {};
-			var self = this;
-			if (!this.buffer) {
-				this.load(function(err) {
-					if (err) {
-						throw err;
-					}
-
-					play();
-				});
-			} else {
-				play();
-			}
-
-			function play() {
-				self.destroy();
-				self.gainNode = self.context.createGain();
-				self.gainNode.connect(self.context.destination);
-				self.setVolume(self.currentVolume);
-
-				self.source = self.context.createBufferSource();
-				self.source.buffer = self.buffer;
-				self.source.connect(self.gainNode);
-
-				self.source.loop = !!options.loop;
-				self.source.addEventListener('ended', self.onFinished, false);
-
-				self.source.start(0, self.offset);
-				self.playing = true;
-				self.startedAt = Date.now();
-				self.emit('play');
-				self.playingId = window.setInterval(function() {
-					self.emit('playing', [ self.getCurrentTime(), self.buffer.duration ]);
-				}, self.progressInterval);
-			}
-		},
-
-		getCurrentTime: function() {
-			var currentTime = this.offset + ((Date.now() - this.startedAt) / 1000);
-
-			//handle looping offsets
-			while (currentTime >= this.buffer.duration) {
-				currentTime -= this.buffer.duration;
-			}
-
-			return currentTime;
+			this.setVolume(this.currentVolume);
+			this.audio.addEventListener('ended', this.onFinished);
+			this.audio.loop = !!options.loop;
+			this.audio.play();
+			this.emit('play');
 		},
 
 		pause: function() {
-			if (this.source) {
-				this.source.removeEventListener('ended', this.onFinished, false);
-				this.source.stop(0);
-				this.offset = this.getCurrentTime();
-				this.destroy();
-			}
+			this.audio.removeEventListener('ended', this.onFinished, false);
+			this.audio.pause();
+			this.playing = false;
 		},
 
 		seek: function(time) {
-			if (!this.source) {
-				return;
+			if (this.audio.fastSeek) {
+				this.audio.fastSeek(time);
+			} else {
+				this.audio.currentTime = time;
 			}
-
-			time = Math.min(this.buffer.duration, Math.max(0, time));
-			this.pause();
-			this.offset = time;
-			this.play();
 		},
 
 		stop: function() {
-			if (this.source) {
-				this.source.removeEventListener('ended', this.onFinished, false);
-				this.source.stop(0);
-				this.destroy();
-				this.emit('stop');
-			}
-
-			this.offset = 0;
-			this.startedAt = 0;
+			this.pause();
+			this.seek(0);
+			this.emit('stop');
 		},
 
 		setVolume: function(value) {
-			if (!this.gainNode) {
-				return;
-			}
-
 			value = Math.max(0, Math.min(value, 1));
-			this.gainNode.gain.value = value;
+			this.audio.volume = value;
 			this.currentVolume = value;
 		},
 
@@ -197,14 +148,14 @@
 		this.files = {};
 		this.events = {
 			load: [],
-			playing: [],
+			timeupdate: [],
 			finish: []
 		};
 
 		var self = this;
 		function listen(file) {
-			file.on('playing', function(time, duration) {
-				self.emit('playing', [ time, duration, file ]);
+			file.on('timeupdate', function(time, duration) {
+				self.emit('timeupdate', [ time, duration, file ]);
 			});
 			file.on('finish', function() {
 				self.emit('finish', [ file ]);
@@ -226,53 +177,6 @@
 	}
 
 	AudioFileManager.prototype = {
-		loadAll: function(callback) {
-			var active = 0,
-				maxRequests = this.maxRequests,
-				complete = 0,
-				self = this,
-				responseSent = false,
-				keys = Object.keys(this.files),
-				expected = keys.length;
-
-			function loadFile(file, next) {
-				if (active > maxRequests) {
-					window.setTimeout(function() {
-						loadFile(file, next);
-					}, 50);
-				} else {
-					active++;
-					file.load(function(err) {
-						active--;
-						complete++;
-						if (!err) {
-							self.emit('load', file);
-						}
-						next(err);
-					});
-				}
-			}
-
-			for (var i = 0; i < keys.length; i++) {
-				loadFile(this.files[keys[i]], function(err) {
-					if (responseSent) {
-						return;
-					}
-
-					if (err) {
-						responseSent = true;
-						callback(err);
-						return;
-					}
-
-					if (complete === expected) {
-						responseSent = true;
-						callback();
-					}
-				});
-			}
-		},
-
 		play: function(name, options) {
 			var file = this.files[name];
 			if (!file) {
