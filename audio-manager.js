@@ -45,7 +45,7 @@
 			this.audio.addEventListener('ended', function() {
 				self.playing = false;
 			});
-			this.audio.addEventListener('progress', function(e) {
+			this.audio.addEventListener('progress', function() {
 				self.emit('loading', [ self.getAmountBuffered(), self.getDuration() ]);
 			});
 		},
