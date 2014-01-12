@@ -1,4 +1,7 @@
 # AudioManager
+
+![Interface](./docs/interface.png "Audio Manager Interface")
+
 This is a little experiment at using the Web Audio API
 to write a homegrown HTML audio player.
 
