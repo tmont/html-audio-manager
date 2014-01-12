@@ -267,9 +267,9 @@
   -webkit-transition: opacity 150ms;
   transition: opacity 150ms;
   width: 0;
-  -moz-transition: width 100ms linear;
-  -webkit-transition: width 100ms linear;
-  transition: width 100ms linear;
+  -moz-transition: width 280ms linear;
+  -webkit-transition: width 280ms linear;
+  transition: width 280ms linear;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress:hover {
   opacity: 1;
