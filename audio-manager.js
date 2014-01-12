@@ -1,16 +1,5 @@
 (function(window) {
 
-	function createContext() {
-		if (window.AudioContext) {
-			return new window.AudioContext();
-		}
-		if (window.webkitAudioContext) {
-			return new window.webkitAudioContext();
-		}
-
-		throw new Error('Your browser doesn\'t support AudioContext');
-	}
-
 	function AudioFile(path, options) {
 		options = options || {};
 		this.path = path;
