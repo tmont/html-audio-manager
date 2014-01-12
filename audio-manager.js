@@ -7,7 +7,7 @@
 		this.offset = 0;
 		this.metadata = null;
 		this.playing = false;
-		this.audio = new Audio(path);
+		this.audio = null;
 
 		this.defaultVolume = options.defaultVolume || 1;
 		this.currentVolume = this.defaultVolume;
@@ -16,6 +16,7 @@
 			play: [],
 			stop: [],
 			timeupdate: [],
+			loading: [],
 			finish: []
 		};
 
@@ -24,21 +25,31 @@
 			self.audio.removeEventListener('ended', self.onFinished);
 			self.emit('finish');
 		};
-
-		this.onTimeUpdate = function() {
-			self.emit('timeupdate', [ self.getCurrentTime(), self.getDuration() ]);
-		};
-
-		this.audio.addEventListener('timeupdate', this.onTimeUpdate);
-		this.audio.addEventListener('playing', function() {
-			self.playing = true;
-		});
-		this.audio.addEventListener('ended', function() {
-			self.playing = false;
-		});
 	}
 
 	AudioFile.prototype = {
+		init: function() {
+			if (this.audio) {
+				return;
+			}
+
+			var self = this;
+
+			this.audio = new Audio(this.path);
+			this.audio.addEventListener('timeupdate', function() {
+				self.emit('timeupdate', [ self.getCurrentTime(), self.getDuration() ]);
+			});
+			this.audio.addEventListener('playing', function() {
+				self.playing = true;
+			});
+			this.audio.addEventListener('ended', function() {
+				self.playing = false;
+			});
+			this.audio.addEventListener('progress', function(e) {
+				self.emit('loading', [ self.getAmountBuffered(), self.getDuration() ]);
+			});
+		},
+
 		getMetadata: function(callback) {
 			if (this.metadata) {
 				callback(null, this.metadata);
@@ -66,10 +77,18 @@
 		},
 
 		getCurrentTime: function() {
+			if (!this.audio) {
+				return 0;
+			}
+
 			return this.audio.currentTime;
 		},
 
 		getDuration: function() {
+			if (!this.audio) {
+				return 0;
+			}
+
 			return this.audio.duration;
 		},
 
@@ -77,8 +96,31 @@
 			return this.playing;
 		},
 
+		getAmountBuffered: function() {
+			if (!this.audio) {
+				return 0;
+			}
+
+			var ranges = this.audio.buffered;
+			var total = 0;
+			for (var i = 0; i < ranges.length; i++) {
+				total += (ranges.end(i) - ranges.start(i));
+			}
+
+			return total;
+		},
+
+		isBuffered: function() {
+			if (!this.audio) {
+				return false;
+			}
+
+			return this.getAmountBuffered() >= this.getDuration();
+		},
+
 		play: function(options) {
 			options = options || {};
+			this.init();
 			this.setVolume(this.currentVolume);
 			this.audio.addEventListener('ended', this.onFinished);
 			this.audio.loop = !!options.loop;
@@ -87,12 +129,20 @@
 		},
 
 		pause: function() {
+			if (!this.audio) {
+				return;
+			}
+
 			this.audio.removeEventListener('ended', this.onFinished, false);
 			this.audio.pause();
 			this.playing = false;
 		},
 
 		seek: function(time) {
+			if (!this.audio) {
+				return;
+			}
+
 			if (this.audio.fastSeek) {
 				this.audio.fastSeek(time);
 			} else {
@@ -101,12 +151,20 @@
 		},
 
 		stop: function() {
+			if (!this.audio) {
+				return;
+			}
+
 			this.pause();
 			this.seek(0);
 			this.emit('stop');
 		},
 
 		setVolume: function(value) {
+			if (!this.audio) {
+				return;
+			}
+
 			value = Math.max(0, Math.min(value, 1));
 			this.audio.volume = value;
 			this.currentVolume = value;
