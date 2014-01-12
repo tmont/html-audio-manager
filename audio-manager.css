@@ -236,39 +236,34 @@
   bottom: 0;
   margin: 0.25em;
 }
-.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-well,
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress,
-.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered {
-  height: 1em;
-  position: absolute;
-  top: 50%;
-  border-top-right-radius: 0.25em;
-  border-bottom-right-radius: 0.25em;
+.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered,
+.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-well {
+  height: 0.5em;
+  border-radius: 0.5em;
   cursor: pointer;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-well {
-  margin-top: -0.52em;
+  margin-top: -0.27em;
+  height: 0.5em;
+  position: absolute;
+  top: 50%;
   background-color: #3b3b3b;
   background-image: -moz-linear-gradient(top, #484848 0%, #3b3b3b 100%);
   background-image: -webkit-linear-gradient(top, #484848 0%, #3b3b3b 100%);
   background-image: -ms-linear-gradient(top, #484848 0%, #3b3b3b 100%);
   background-image: -o-linear-gradient(top, #484848 0%, #3b3b3b 100%);
   background-image: linear-gradient(to bottom, #484848 0%, #3b3b3b 100%);
-  border: 0.02em solid #4d4d4d;
+  border: 0.02em solid #767676;
   width: 100%;
+  box-shadow: 0 0 0.25em rgba(230, 230, 230, 0.3);
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress,
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered {
-  margin-top: -0.5em;
-  opacity: 0.8;
   width: 0;
-  -moz-transition: all 280ms linear;
-  -webkit-transition: all 280ms linear;
-  transition: all 280ms linear;
-}
-.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress:hover,
-.audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered:hover {
-  opacity: 1;
+  -moz-transition: width 280ms linear;
+  -webkit-transition: width 280ms linear;
+  transition: width 280ms linear;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress {
   background-color: #cccccc;

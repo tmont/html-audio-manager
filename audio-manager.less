@@ -277,13 +277,10 @@
 			bottom: 0;
 			margin: (@size * .25);
 
-			@progress-height: @size;
-			.@{prefix}progress-well, .@{prefix}progress, .@{prefix}progress-buffered {
+			@progress-height: (@size * 0.5);
+			.@{prefix}progress, .@{prefix}progress-buffered, .@{prefix}progress-well {
 				height: @progress-height;
-				position: absolute;
-				top: 50%;
-				border-top-right-radius: @radius;
-				border-bottom-right-radius: @radius;
+				border-radius: @progress-height;
 				cursor: pointer;
 			}
 
@@ -292,18 +289,17 @@
 				@border-width: (@size * .02);
 				@actual-height: @progress-height + (@border-width * 2);
 				margin-top: -(@actual-height / 2);
+				height: @progress-height;
+				position: absolute;
+				top: 50%;
 				.gradient-vertical-2(@well-color, darken(@well-color, 5%));
-				border: @border-width solid lighten(@bg-color, 9%);
+				border: @border-width solid lighten(@bg-color, 25%);
 				width: 100%;
+				box-shadow: 0 0 (@size * 0.25) fade(@icon-color, 30);
 			}
 			.@{prefix}progress, .@{prefix}progress-buffered {
-				margin-top: -(@progress-height / 2);
-				opacity: @icon-opacity;
 				width: 0;
-				.transition(all 280ms linear);
-				&:hover {
-					opacity: 1;
-				}
+				.transition(width 280ms linear);
 			}
 
 			.@{prefix}progress {

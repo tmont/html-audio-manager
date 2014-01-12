@@ -54,7 +54,7 @@
 				$infoContainer = $('<div/>').addClass(prefix + 'info-container'),
 				$progressContainer = $('<div/>').addClass(prefix + 'progress-container'),
 				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer).click(seek),
-				$progressBuffered = $('<div/>').addClass(prefix + 'progress-buffered').appendTo($progressContainer).click(seek);
+				$progressBuffered = $('<div/>').addClass(prefix + 'progress-buffered').appendTo($progressWell).click(seek);
 
 			function seek(e) {
 				var x = e.clientX + $(document).scrollLeft(),
@@ -108,7 +108,7 @@
 				});
 
 			this.controls.$time = $('<div/>').addClass(prefix + 'time').appendTo($controlContainer);
-			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressContainer).click(seek);
+			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressBuffered).click(seek);
 			$progressContainer.appendTo($controlContainer);
 
 			this.info.$track = $('<div/>').addClass(prefix + 'track').appendTo($infoContainer);
