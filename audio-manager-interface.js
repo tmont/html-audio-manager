@@ -18,6 +18,9 @@
 		this.currentVolume = 1;
 		this.manager = options.manager;
 		this.manager.on('timeupdate', function(time, duration) {
+			self.updateTime(time, duration);
+		});
+		this.manager.on('loading', function(time, duration) {
 			self.updateProgress(time, duration);
 		});
 		this.manager.on('finish', function() {
@@ -50,7 +53,8 @@
 			var $controlContainer = $('<div/>').addClass(prefix + 'control-container'),
 				$infoContainer = $('<div/>').addClass(prefix + 'info-container'),
 				$progressContainer = $('<div/>').addClass(prefix + 'progress-container'),
-				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer).click(seek);
+				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer),
+				$progressBuffered = $('<div/>').addClass(prefix + 'progress-buffered').appendTo($progressContainer).click(seek);
 
 			function seek(e) {
 				var x = e.clientX + $(document).scrollLeft(),
@@ -60,6 +64,8 @@
 
 				self.seek(timeToSeekTo);
 			}
+
+			this.controls.$buffered = $progressBuffered;
 
 			this.controls.$play = $('<div/>')
 				.addClass(prefix + 'play')
@@ -143,6 +149,12 @@
 
 		updateProgress: function(time, duration) {
 			duration = duration || 1;
+			var percent = (time / duration) * 100;
+			this.controls.$buffered.width(percent + '%');
+		},
+
+		updateTime: function(time, duration) {
+			duration = duration || 1;
 
 			function pad(s) {
 				return s < 10 ? '0' + s : s;
@@ -166,9 +178,8 @@
 		},
 
 		seek: function(time) {
-			time = time || 0;
 			var file = this.files[this.current];
-			file.seek(time);
+			file.seek(time || 0);
 		},
 
 		play: function() {
@@ -177,6 +188,10 @@
 			this.manager.play(file.name);
 			this.setVolume(this.currentVolume);
 			this.controls.$play.toggleClass(prefix + 'play ' + prefix + 'pause');
+			if (file.isBuffered()) {
+				//no loading events are sent if the audio is completely buffered
+				this.controls.$buffered.width('100%');
+			}
 		},
 
 		pause: function() {

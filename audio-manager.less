@@ -278,31 +278,38 @@
 			margin: (@size * .25);
 
 			@progress-height: @size;
-			.@{prefix}progress-well, .@{prefix}progress {
+			.@{prefix}progress-well, .@{prefix}progress, .@{prefix}progress-buffered {
 				height: @progress-height;
 				position: absolute;
 				top: 50%;
-				border-radius: @radius;
-				cursor: pointer;
+				border-top-right-radius: @radius;
+				border-bottom-right-radius: @radius;
 			}
+			@well-color: lighten(@bg-color, 7%);
 			.@{prefix}progress-well {
 				@border-width: (@size * .02);
 				@actual-height: @progress-height + (@border-width * 2);
 				margin-top: -(@actual-height / 2);
-				.gradient-vertical-2(lighten(@bg-color, 7%), lighten(@bg-color, 2%));
+				.gradient-vertical-2(@well-color, darken(@well-color, 5%));
 				border: @border-width solid lighten(@bg-color, 9%);
 				width: 100%;
 			}
-			.@{prefix}progress {
+			.@{prefix}progress, .@{prefix}progress-buffered {
 				margin-top: -(@progress-height / 2);
-				.gradient-vertical-2(@icon-color, darken(@icon-color, 10%));
 				opacity: @icon-opacity;
-				.transition(opacity 150ms);
 				width: 0;
-				.transition(width 280ms linear);
+				.transition(all 280ms linear);
 				&:hover {
 					opacity: 1;
 				}
+			}
+
+			.@{prefix}progress {
+				.gradient-vertical-2(@icon-color, darken(@icon-color, 10%));
+			}
+
+			.@{prefix}progress-buffered {
+				.gradient-vertical-2(lighten(@well-color, 10%), lighten(@well-color, 5%));
 			}
 		}
 

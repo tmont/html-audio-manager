@@ -196,7 +196,8 @@
 		this.events = {
 			load: [],
 			timeupdate: [],
-			finish: []
+			finish: [],
+			loading: []
 		};
 
 		var self = this;
@@ -206,6 +207,9 @@
 			});
 			file.on('finish', function() {
 				self.emit('finish', [ file ]);
+			});
+			file.on('loading', function(time, duration) {
+				self.emit('loading', [ time, duration, file ]);
 			});
 		}
 
@@ -225,12 +229,7 @@
 
 	AudioFileManager.prototype = {
 		play: function(name, options) {
-			var file = this.files[name];
-			if (!file) {
-				throw new Error('Unknown file ' + name);
-			}
-
-			file.play(options);
+			this.files[name] && this.files[name].play(options);
 		},
 
 		stop: function(name) {
