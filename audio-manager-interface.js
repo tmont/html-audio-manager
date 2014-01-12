@@ -53,7 +53,7 @@
 			var $controlContainer = $('<div/>').addClass(prefix + 'control-container'),
 				$infoContainer = $('<div/>').addClass(prefix + 'info-container'),
 				$progressContainer = $('<div/>').addClass(prefix + 'progress-container'),
-				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer),
+				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer).click(seek),
 				$progressBuffered = $('<div/>').addClass(prefix + 'progress-buffered').appendTo($progressContainer).click(seek);
 
 			function seek(e) {
@@ -127,6 +127,7 @@
 				.appendTo(this.$element);
 
 			this.controls.$time.text('00:00');
+			this.files[this.current].init();
 			this.setInfo();
 		},
 

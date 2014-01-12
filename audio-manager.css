@@ -244,6 +244,7 @@
   top: 50%;
   border-top-right-radius: 0.25em;
   border-bottom-right-radius: 0.25em;
+  cursor: pointer;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-well {
   margin-top: -0.52em;
