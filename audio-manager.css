@@ -31,7 +31,8 @@
   float: right;
   margin-left: 0.25em;
 }
-.audio-manager-container .audio-manager-info-container .audio-manager-album {
+.audio-manager-container .audio-manager-info-container .audio-manager-album,
+.audio-manager-container .audio-manager-info-container .audio-manager-track {
   display: none;
 }
 .audio-manager-container .audio-manager-info-container .audio-manager-track,
