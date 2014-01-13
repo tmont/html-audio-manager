@@ -66,7 +66,8 @@
   cursor: pointer;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-btn:active,
-.audio-manager-container .audio-manager-control-container .audio-manager-btn:focus {
+.audio-manager-container .audio-manager-control-container .audio-manager-btn:focus,
+.audio-manager-container .audio-manager-control-container .audio-manager-btn.audio-manager-active {
   background-color: #5c5c5c;
   background-image: -moz-linear-gradient(top, #363636 0%, #5c5c5c 100%);
   background-image: -webkit-linear-gradient(top, #363636 0%, #5c5c5c 100%);
@@ -182,9 +183,6 @@
   position: relative;
   overflow: visible;
 }
-.audio-manager-container .audio-manager-control-container .audio-manager-volume.audio-manager-active {
-  opacity: 1;
-}
 .audio-manager-container .audio-manager-control-container .audio-manager-volume.audio-manager-active .audio-manager-volume-control {
   display: block;
 }
@@ -198,6 +196,12 @@
   border-bottom-left-radius: 0;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
   cursor: default;
+  background-color: #5c5c5c;
+  background-image: -moz-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -webkit-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -ms-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -o-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: linear-gradient(to bottom, #363636 0%, #5c5c5c 100%);
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-volume .audio-manager-volume-control input[type="range"] {
   width: 95%;

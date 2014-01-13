@@ -115,7 +115,7 @@
 			overflow: hidden;
 			display: inline-block;
 			cursor: pointer;
-			&:active, &:focus {
+			&:active, &:focus, &.@{prefix}active {
 				.gradient-vertical-2(darken(@control-color, 15%), @control-color);
 			}
 			span {
@@ -236,7 +236,6 @@
 			overflow: visible;
 
 			&.@{prefix}active {
-				opacity: 1;
 				.@{prefix}volume-control {
 					display: block;
 				}
@@ -252,6 +251,7 @@
 				border-bottom-left-radius: 0;
 				box-shadow: (@control-size * .25) (@control-size * .25) (@control-size * .25) fade(black, 40);
 				cursor: default;
+				.gradient-vertical-2(darken(@control-color, 15%), @control-color);
 
 				input[type="range"] {
 					width: 95%;
