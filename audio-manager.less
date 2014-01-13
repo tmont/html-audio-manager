@@ -43,14 +43,14 @@
 	@color: white;
 	@bg-color: #363636;
 	@total-width: (@size * 30);
-	font-size: 16px;
 
+	font-size: 16px;
+	font-family: 'Open Sans', sans-serif;
 	position: relative;
 	width: @total-width;
 	.box-sizing(border-box);
 	color: @color;
-
-	.gradient-vertical-2(lighten(@bg-color, 10%), darken(@bg-color, 10%));
+	background-color: @bg-color;
 	border-radius: @radius;
 	box-shadow: (@size * .25) (@size * .25) (@size * .25) fade(black, 40);
 
@@ -65,8 +65,8 @@
 
 	.@{prefix}info-container {
 		border-radius: @radius;
-		padding: (@size * .25);
-		min-height: (@size * 1.125);
+		padding: (@size * .25) (@size * .5);
+		min-height: (@size * 1.95);
 		.box-sizing(border-box);
 
 		&:after {
@@ -333,7 +333,7 @@
 		.@{prefix}time {
 			width: @time-width;
 			color: @icon-color;
-			font-family: monospace;
+			font-family: Consolas, Inconsolata, Monaco, monospace;
 			text-align: center;
 			height: 100%;
 			line-height: @control-height;
