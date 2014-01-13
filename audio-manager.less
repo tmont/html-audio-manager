@@ -92,7 +92,7 @@
 	}
 
 	.@{prefix}control-container {
-		@time-width: (@size * 5);
+		@time-width: (@size * 8);
 		@icon-color: darken(@color, 10%);
 		@icon-transparent: fade(@icon-color, 0);
 		@button-padding: (@size * .25);
@@ -340,6 +340,7 @@
 			width: @time-width;
 			color: @icon-color;
 			font-family: Consolas, Inconsolata, Monaco, monospace;
+			font-size: @control-size;
 			text-align: center;
 			height: 100%;
 			line-height: @control-height;
@@ -347,6 +348,13 @@
 			.box-sizing(border-box);
 			.user-select(none);
 			cursor: default;
+
+			.@{prefix}time-duration {
+				opacity: 0.75;
+				&:before {
+					content: '/';
+				}
+			}
 		}
 	}
 }

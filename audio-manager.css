@@ -239,7 +239,7 @@
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container {
   position: relative;
-  width: 290px;
+  width: 236px;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress,
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered,
@@ -287,9 +287,10 @@
   background-image: linear-gradient(to bottom, #616161 0%, #555555 100%);
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-time {
-  width: 90px;
+  width: 144px;
   color: #e6e6e6;
   font-family: Consolas, Inconsolata, Monaco, monospace;
+  font-size: 16px;
   text-align: center;
   height: 100%;
   line-height: 40px;
@@ -304,4 +305,10 @@
   -ms-user-select: none;
   user-select: none;
   cursor: default;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-time .audio-manager-time-duration {
+  opacity: 0.75;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-time .audio-manager-time-duration:before {
+  content: '/';
 }

@@ -91,7 +91,9 @@
 				.click(function() { self.next(); });
 
 			$progressContainer.appendTo($controlContainer);
-			this.controls.$time = $('<div/>').addClass(prefix + 'time' + control).appendTo($controlContainer);
+			var $timeContainer = $('<div/>').addClass(prefix + 'time' + control).appendTo($controlContainer);
+			this.controls.$elapsed = $('<span/>').addClass(prefix + 'time-elapsed').appendTo($timeContainer).text('');
+			this.controls.$duration = $('<span/>').addClass(prefix + 'time-duration').appendTo($timeContainer).text('');
 			this.controls.$volume = $('<div/>')
 				.addClass(prefix + 'volume' + btn + control)
 				.appendTo($controlContainer)
@@ -130,8 +132,9 @@
 				.append($infoContainer, $controlContainer)
 				.appendTo(this.$element);
 
-			this.controls.$time.text('00:00');
-			this.files[this.current].init();
+			var file = this.files[this.current];
+			file.init();
+			this.updateTime(0, file.getDuration());
 			this.setInfo();
 		},
 
@@ -156,30 +159,36 @@
 			duration = duration || 1;
 			var percent = (time / duration) * 100;
 			this.controls.$buffered.width(percent + '%');
+			var file = this.files[this.current];
+			this.updateTime(file.getCurrentTime(), file.getDuration());
 		},
 
 		updateTime: function(time, duration) {
-			duration = duration || 1;
-
+			time = time || 0;
+			duration = duration || 0;
 			function pad(s) {
 				return s < 10 ? '0' + s : s;
 			}
 
-			var percent = (time / duration) * 100,
-				minutes = Math.floor(time / 60),
-				seconds = Math.floor(time - (minutes * 60));
+			var percent = !duration ? 0 : (time / duration) * 100;
 
 			this.controls.$progress.width(percent + '%');
 
 			//since this can happen many times per second, let's micro-optimize it
-			var $time = this.controls.$time,
-				node = $time[0].firstChild,
-				text = pad(minutes) + ':' + pad(seconds);
-			if (node.nodeValue === text) {
-				return;
+			function setTime($element, total) {
+				var minutes = Math.floor(total / 60),
+					seconds = Math.floor(total - (minutes * 60));
+				var node = $element[0].firstChild,
+					text = pad(minutes) + ':' + pad(seconds);
+				if (node.nodeValue === text) {
+					return;
+				}
+
+				$element[0].replaceChild(document.createTextNode(text), node);
 			}
 
-			$time[0].replaceChild(document.createTextNode(text), node);
+			setTime(this.controls.$elapsed, time);
+			setTime(this.controls.$duration, duration);
 		},
 
 		seek: function(time) {
