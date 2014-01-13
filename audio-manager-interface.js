@@ -102,7 +102,9 @@
 					$(this).toggleClass(prefix + 'active');
 				});
 
-			var $sliderContainer = $('<div/>').addClass(prefix + 'volume-control' + control).appendTo(this.controls.$volume);
+			var $sliderContainer = $('<div/>')
+				.addClass(prefix + 'volume-control' + control)
+				.appendTo(this.controls.$volume);
 
 			$('<input/>')
 				.attr({ type: 'range', value: 100, max: 100, min: 0 })
@@ -114,8 +116,10 @@
 					self.setVolume(Math.pow(value / max, 1.5));
 				});
 
-
-			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressBuffered).click(seek);
+			this.controls.$progress = $('<div/>')
+				.addClass(prefix + 'progress')
+				.appendTo($progressBuffered)
+				.click(seek);
 
 			this.info.$track = $('<div/>').addClass(prefix + 'track').appendTo($infoContainer);
 			this.info.$title = $('<div/>').addClass(prefix + 'title').appendTo($infoContainer);
