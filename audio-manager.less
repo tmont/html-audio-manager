@@ -42,19 +42,32 @@
 	@radius: (@size * .25);
 	@color: white;
 	@bg-color: #363636;
+	@total-width: (@size * 30);
+	font-size: 16px;
 
 	position: relative;
-	width: (@size * 30);
+	width: @total-width;
+	.box-sizing(border-box);
 	color: @color;
 
 	.gradient-vertical-2(lighten(@bg-color, 10%), darken(@bg-color, 10%));
 	border-radius: @radius;
 	box-shadow: (@size * .25) (@size * .25) (@size * .25) fade(black, 40);
 
+	&.@{prefix}volume-open {
+		&, .@{prefix}control-container {
+			border-bottom-right-radius: 0;
+			.@{prefix}control:last-child {
+				border-bottom-right-radius: 0;
+			}
+		}
+	}
+
 	.@{prefix}info-container {
 		border-radius: @radius;
 		padding: (@size * .25);
 		min-height: (@size * 1.125);
+		.box-sizing(border-box);
 
 		&:after {
 			display: block;
@@ -80,38 +93,51 @@
 
 	.@{prefix}control-container {
 		@time-width: (@size * 5);
-		@button-width: (@size * 2);
+		@control-height: @height;
 		@icon-color: darken(@color, 10%);
 		@icon-transparent: fade(@icon-color, 0);
 		@button-padding: (@size * .25);
 		@icon-opacity: 0.8;
 		@height: (@size * 2.5);
+		@control-color: lighten(@bg-color, 15%);
+		@control-border-color: darken(@control-color, 11%);
+		@wiggle: 0.25em;
 
-		border-radius: @radius;
+		border-bottom-right-radius: @radius;
+		border-bottom-left-radius: @radius;
+		border-top: 1px solid @control-border-color;
 		height: @height;
 		position: relative;
 		clear: both;
 
-		.@{prefix}play, .@{prefix}prev, .@{prefix}next, .@{prefix}volume, .@{prefix}pause {
-			width: @button-width;
-			height: @button-width;
+		.@{prefix}btn {
+			width: @control-height;
 			position: relative;
 			overflow: hidden;
 			display: inline-block;
 			cursor: pointer;
-			margin: @button-padding; //using padding messes up the icons
-			opacity: @icon-opacity;
-			.transition(opacity 150ms);
-			&:hover {
-				opacity: 1;
+			&:active, &:focus {
+				.gradient-vertical-2(darken(@control-color, 15%), @control-color);
 			}
 			span {
 				display: inline-block;
 			}
 		}
-
-		.@{prefix}play, .@{prefix}prev, .@{prefix}next, .@{prefix}pause {
+		.@{prefix}control {
+			.gradient-vertical-2(@control-color, darken(@control-color, 15%));
+			height: @control-height;
 			float: left;
+			.box-sizing(border-box);
+			border-right: 1px solid lighten(@control-border-color, 3%);
+			border-left: 1px solid @control-border-color;
+			&:first-child {
+				border-bottom-left-radius: @radius;
+				border-left: none;
+			}
+			&:last-child {
+				border-bottom-right-radius: @radius;
+				border-right: none;
+			}
 		}
 
 		//http://cssdeck.com/labs/css3-monochrome-icon-set
@@ -122,7 +148,7 @@
 				border-style: solid;
 				border-color: @icon-transparent @icon-transparent @icon-transparent @icon-color;
 				border-width: (@size * .5) (@size * .5) (@size * .5) (@size * .75);
-				margin: (@size * .5) 0 0 (@size * .75);
+				margin: (@size * 0.5 + @wiggle) 0 0 (@size * 0.75 + @wiggle);
 			}
 		}
 		.@{prefix}pause {
@@ -132,7 +158,7 @@
 				border: (@size * .25) solid @icon-color;
 				border-top: none;
 				border-bottom: none;
-				margin: (@size * .5) 0 0 (@size * .75);
+				margin: (@size * .5 + @wiggle) 0 0 (@size * .75 + @wiggle);
 			}
 		}
 		.@{prefix}prev {
@@ -142,7 +168,7 @@
 				border-style: solid;
 				border-color: @icon-transparent @icon-color @icon-transparent @icon-transparent;
 				border-width: (@size * .5) (@size * .75) (@size * .5) (@size * .5);
-				margin: (@size * .5) 0 0 (@size * -.125);
+				margin: (@size * .5 + @wiggle) 0 0 (@size * -.125 + @wiggle);
 				&:before {
 					content: '';
 					position: absolute;
@@ -151,7 +177,7 @@
 					height: (@size * 1);
 					left: 0;
 					top: 0;
-					margin: (@size * .5) 0 0 (@size * .125);
+					margin: (@size * .5 + @wiggle) 0 0 (@size * .125 + @wiggle);
 				}
 				&:after {
 					content: '';
@@ -161,7 +187,7 @@
 					border-style: solid;
 					border-color: @icon-transparent @icon-color @icon-transparent @icon-transparent;
 					border-width: (@size * .5) (@size * .75) (@size * .5) (@size * .5);
-					margin: (@size * .5) 0 0 (@size * .625);
+					margin: (@size * .5 + @wiggle) 0 0 (@size * .625 + @wiggle);
 					left: 0;
 					top: 0;
 				}
@@ -175,7 +201,7 @@
 				border-color: @icon-transparent;
 				border-left-color: @icon-color;
 				border-width: (@size * .5) (@size * .5) (@size * .5) (@size * .75);
-				margin: (@size * .5) 0 0 (@size * .125);
+				margin: (@size * .5 + @wiggle) 0 0 (@size * .125 + @wiggle);
 				&:before {
 					content: '';
 					position: absolute;
@@ -184,7 +210,7 @@
 					height: (@size * 1);
 					left: 0;
 					top: 0;
-					margin: (@size * .5) 0 0 (@size * 1.625);
+					margin: (@size * .5 + @wiggle) 0 0 (@size * 1.625 + @wiggle);
 				}
 				&:after {
 					content: '';
@@ -195,14 +221,13 @@
 					border-color: @icon-transparent;
 					border-left-color: @icon-color;
 					border-width: (@size * .5) (@size * .5) (@size * .5) (@size * .75);
-					margin: (@size * .5) 0 0 (@size * .875);
+					margin: (@size * .5 + @wiggle) 0 0 (@size * .875 + @wiggle);
 					left: 0;
 					top: 0
 				}
 			}
 		}
 		.@{prefix}volume {
-			float: right;
 			position: relative;
 			overflow: visible;
 
@@ -218,18 +243,15 @@
 				position: absolute;
 				width: (@size * 5);
 				right: -(@size * 5);
-				height: @height - @button-padding;
-				.gradient-vertical-2(@bg-color, darken(@bg-color, 10%));
 				border-top-right-radius: @radius;
 				border-bottom-right-radius: @radius;
+				border-bottom-left-radius: 0;
 				box-shadow: (@size * .25) (@size * .25) (@size * .25) fade(black, 40);
 				cursor: default;
 
 				input[type="range"] {
 					width: (@size * 5);
-					margin: 0;
-					position: relative;
-					top: .5em;
+					margin: (.5em + @wiggle) 0 0 @wiggle;
 				}
 			}
 
@@ -237,7 +259,7 @@
 				width: (@size * .625);
 				height: (@size * .625);
 				background-color: @icon-color;
-				margin: (@size * .75) 0 0 (@size * .125);
+				margin: (@size * .75 + @wiggle) 0 0 (@size * .125 + @wiggle);
 
 				&:after {
 					content: '';
@@ -248,8 +270,8 @@
 					border-color: @icon-transparent;
 					border-right-color: @icon-color;
 					border-width: (@size * .75) (@size * 1) (@size * .75) (@size * .9375);
-					left: -(@size * .8125);
-					top: (@size * .3125);
+					left: -(@size * .8125) + @wiggle;
+					top: (@size * .3125) + @wiggle;
 				}
 
 				&:before {
@@ -262,20 +284,16 @@
 					border-width: (@size * .5) (@size * .5) 0 0;
 					border-radius: 0 (@size * 3.125) 0 0;
 					.transform(rotate(45deg));
-					left: (@size * 1.1875);
-					top: (@size * .6875);
+					left: (@size * 1.1875) + @wiggle;
+					top: (@size * .6875) + @wiggle;
 				}
 			}
 		}
 
 		.@{prefix}progress-container {
-			@total-button-width: @button-width + (@button-padding * 2);
-			position: absolute;
-			top: 0;
-			right: (@time-width + @total-button-width) - 1.25;
-			left: (@total-button-width * 3);
-			bottom: 0;
-			margin: (@size * .25);
+			@total-button-width: @control-height;
+			position: relative;
+			width: @total-width - (@time-width + (@control-height * 4));
 
 			@progress-height: (@size * 0.5);
 			.@{prefix}progress, .@{prefix}progress-buffered, .@{prefix}progress-well {
@@ -294,8 +312,9 @@
 				top: 50%;
 				.gradient-vertical-2(@well-color, darken(@well-color, 5%));
 				border: @border-width solid lighten(@bg-color, 25%);
-				width: 100%;
-				box-shadow: 0 0 (@size * 0.25) fade(@icon-color, 30);
+				width: 95%;
+				margin-left: 2.5%;
+				//box-shadow: 0 0 (@size * 0.25) fade(@icon-color, 30);
 			}
 			.@{prefix}progress, .@{prefix}progress-buffered {
 				width: 0;
@@ -316,10 +335,8 @@
 			color: @icon-color;
 			font-family: monospace;
 			text-align: center;
-			float: right;
 			height: 100%;
-			line-height: (@size * 3);
-			padding: (@size * .25);
+			line-height: @control-height;
 			text-shadow: (@size * .05) (@size * .05) (@size * .1) fade(@icon-color, 50);
 			.box-sizing(border-box);
 			.user-select(none);

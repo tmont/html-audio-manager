@@ -50,9 +50,11 @@
 			}
 
 			this.$container = $('<div/>').addClass(prefix + 'container');
+			var btn = ' ' + prefix + 'btn',
+				control = ' ' + prefix + 'control';
 			var $controlContainer = $('<div/>').addClass(prefix + 'control-container'),
 				$infoContainer = $('<div/>').addClass(prefix + 'info-container'),
-				$progressContainer = $('<div/>').addClass(prefix + 'progress-container'),
+				$progressContainer = $('<div/>').addClass(prefix + 'progress-container' + control),
 				$progressWell = $('<div/>').addClass(prefix + 'progress-well').appendTo($progressContainer).click(seek),
 				$progressBuffered = $('<div/>').addClass(prefix + 'progress-buffered').appendTo($progressWell).click(seek);
 
@@ -68,7 +70,7 @@
 			this.controls.$buffered = $progressBuffered;
 
 			this.controls.$play = $('<div/>')
-				.addClass(prefix + 'play')
+				.addClass(prefix + 'play' + btn + control)
 				.appendTo($controlContainer)
 				.click(function() {
 					var file = self.files[self.current];
@@ -80,22 +82,25 @@
 				});
 
 			this.controls.$prev = $('<div/>')
-				.addClass(prefix + 'prev')
+				.addClass(prefix + 'prev' + btn + control)
 				.appendTo($controlContainer)
 				.click(function() { self.prev(); });
 			this.controls.$next = $('<div/>')
-				.addClass(prefix + 'next')
+				.addClass(prefix + 'next' + btn + control)
 				.appendTo($controlContainer)
 				.click(function() { self.next(); });
 
+			$progressContainer.appendTo($controlContainer);
+			this.controls.$time = $('<div/>').addClass(prefix + 'time' + control).appendTo($controlContainer);
 			this.controls.$volume = $('<div/>')
-				.addClass(prefix + 'volume')
+				.addClass(prefix + 'volume' + btn + control)
 				.appendTo($controlContainer)
 				.click(function() {
+					self.$container.toggleClass(prefix + 'volume-open');
 					$(this).toggleClass(prefix + 'active');
 				});
 
-			var $sliderContainer = $('<div/>').addClass(prefix + 'volume-control').appendTo(this.controls.$volume);
+			var $sliderContainer = $('<div/>').addClass(prefix + 'volume-control' + control).appendTo(this.controls.$volume);
 
 			$('<input/>')
 				.attr({ type: 'range', value: 100, max: 100, min: 0 })
@@ -107,9 +112,8 @@
 					self.setVolume(Math.pow(value / max, 1.5));
 				});
 
-			this.controls.$time = $('<div/>').addClass(prefix + 'time').appendTo($controlContainer);
+
 			this.controls.$progress = $('<div/>').addClass(prefix + 'progress').appendTo($progressBuffered).click(seek);
-			$progressContainer.appendTo($controlContainer);
 
 			this.info.$track = $('<div/>').addClass(prefix + 'track').appendTo($infoContainer);
 			this.info.$title = $('<div/>').addClass(prefix + 'title').appendTo($infoContainer);
