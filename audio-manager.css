@@ -334,7 +334,7 @@
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container {
   position: relative;
-  width: 152px;
+  width: 184px;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress,
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered,
@@ -382,10 +382,10 @@
   background-image: linear-gradient(to bottom, #616161 0%, #555555 100%);
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-time {
-  width: 128px;
+  width: 96px;
   color: #e6e6e6;
   font-family: Consolas, Inconsolata, Monaco, monospace;
-  font-size: 16px;
+  font-size: 12px;
   text-align: center;
   height: 100%;
   line-height: 40px;

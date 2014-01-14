@@ -98,7 +98,7 @@
 	}
 
 	.@{prefix}control-container {
-		@time-width: (@size * 8);
+		@time-width: (@size * 6);
 		@icon-color: darken(@color, 10%);
 		@icon-transparent: fade(@icon-color, 0);
 		@button-padding: (@size * .25);
@@ -427,7 +427,7 @@
 			width: @time-width;
 			color: @icon-color;
 			font-family: Consolas, Inconsolata, Monaco, monospace;
-			font-size: @control-size;
+			font-size: (@control-size * .75);
 			text-align: center;
 			height: 100%;
 			line-height: @control-height;
