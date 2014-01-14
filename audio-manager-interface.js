@@ -228,12 +228,31 @@
 		},
 
 		prev: function() {
+			var file = this.files[this.current];
+			if (file.getCurrentTime() > 2) {
+				//just go back to the beginning of the current track
+				this.seek(0);
+				return;
+			}
+
+			if (this.files.length <= 1) {
+				//nowhere to go
+				return;
+			}
+
+			//go to the previous track
 			this.stop();
 			this.current = (this.current - 1 + this.files.length) % this.files.length;
 			this.play();
 		},
 
 		next: function() {
+			if (this.files.length <= 1) {
+				//nowhere to go
+				return;
+			}
+
+			//go to the next track
 			this.stop();
 			this.current = (this.current + 1) % this.files.length;
 			this.play();
