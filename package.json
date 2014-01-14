@@ -1,11 +1,11 @@
 {
-	"name": "html-audio-manager",
+	"name": "rach3",
 	"version": "0.1.0",
 
 	"author": "Tommy Montgomery <tmont@tmont.com> (http://tmont.com/)",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/tmont/html-audio-manager.git"
+		"url": "https://github.com/tmont/rach3.git"
 	},
 
 	"scripts": {
