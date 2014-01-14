@@ -9,18 +9,13 @@
 	</head>
 	<body>
 		<div id="music-player"></div>
-
-		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/sunlight-min.js"></script>
-		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/lang/sunlight.javascript-min.js"></script>
-		<script type="text/javascript">
-			Sunlight.highlightAll({ lineNumbers: false });
-		</script>
 		<script type="text/javascript" src="../lib/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/audio-metadata.min.js"></script>
 		<script type="text/javascript" src="../audio-manager.js"></script>
 		<script type="text/javascript" src="../audio-manager-interface.js"></script>
 		<script type="text/javascript">
 			var manager = new AudioFileManager({
+				//orbs: new AudioFile('https://s3-us-west-2.amazonaws.com/tmont-www/music/Motif/The Four Orbs.mp3'),
 				stars: new AudioFile('to-the-stars.ogg'),
 				orbit: new AudioFile('orbit.ogg'),
 				galaxy: new AudioFile('all-around-the-galaxy-cut.ogg')
