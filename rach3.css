@@ -344,7 +344,7 @@
   cursor: pointer;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-well {
-  margin-top: -4.32px;
+  margin-top: -5px;
   height: 8px;
   position: absolute;
   top: 50%;
@@ -354,7 +354,7 @@
   background-image: -ms-linear-gradient(top, #484848 0%, #3b3b3b 100%);
   background-image: -o-linear-gradient(top, #484848 0%, #3b3b3b 100%);
   background-image: linear-gradient(to bottom, #484848 0%, #3b3b3b 100%);
-  border: 0.32px solid #767676;
+  border: 1px solid #767676;
   width: 95%;
   margin-left: 2.5%;
 }
