@@ -180,7 +180,6 @@
   margin-top: -6px;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-volume {
-  position: relative;
   overflow: visible;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-volume.audio-manager-active .audio-manager-volume-control {
@@ -241,9 +240,73 @@
   transform: rotate(45deg);
   margin-left: 12px;
 }
+.audio-manager-container .audio-manager-control-container .audio-manager-options span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -9px;
+  margin-left: -9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9px;
+  border: 6px solid #e6e6e6;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -3px;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i.audio-manager-spoke1 {
+  margin-top: -11px;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i.audio-manager-spoke1:before {
+  top: 5px;
+  left: -9px;
+  -moz-transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  transform: rotate(120deg);
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i.audio-manager-spoke1:after {
+  top: 5px;
+  left: 9px;
+  -moz-transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+  -o-transform: rotate(60deg);
+  transform: rotate(60deg);
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i.audio-manager-spoke2 {
+  margin-top: 8px;
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i.audio-manager-spoke2:before {
+  top: -5px;
+  left: 9px;
+  -moz-transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  transform: rotate(120deg);
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i.audio-manager-spoke2:after {
+  top: -5px;
+  left: -9px;
+  -moz-transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+  -o-transform: rotate(60deg);
+  transform: rotate(60deg);
+}
+.audio-manager-container .audio-manager-control-container .audio-manager-options i,
+.audio-manager-container .audio-manager-control-container .audio-manager-options i:before,
+.audio-manager-container .audio-manager-control-container .audio-manager-options i:after {
+  content: '';
+  position: absolute;
+  height: 3px;
+  width: 6px;
+  background-color: #e6e6e6;
+}
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container {
   position: relative;
-  width: 236px;
+  width: 196px;
 }
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress,
 .audio-manager-container .audio-manager-control-container .audio-manager-progress-container .audio-manager-progress-buffered,

@@ -232,7 +232,6 @@
 			}
 		}
 		.@{prefix}volume {
-			position: relative;
 			overflow: visible;
 
 			&.@{prefix}active {
@@ -295,11 +294,75 @@
 				}
 			}
 		}
+		.@{prefix}options {
+			@gear-size: (@control-size * .375);
+			span {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-top: -(@gear-size * 1.5);
+				margin-left: -(@gear-size * 1.5);
+				width: @gear-size;
+				height: @gear-size;
+				border-radius: @gear-size * 1.5;
+				border: @gear-size solid @icon-color;
+			}
+			i {
+				@width: @gear-size;
+				@height: @gear-size * .5;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -(@width * .5);
+
+				@left: @gear-size * 3/2;
+				@top: @gear-size * 5/6;
+
+
+				&.@{prefix}spoke1 {
+					margin-top: -(@gear-size * 1.5) - @height + 1;
+					&:before {
+						top: @top;
+						left: -@left;
+						.transform(rotate(120deg));
+					}
+					&:after {
+						top: @top;
+						left: @left;
+						.transform(rotate(60deg));
+					}
+				}
+				&.@{prefix}spoke2 {
+					margin-top: (@gear-size * 1.5) - 1;
+					&:before {
+						top: -@top;
+						left: @left;
+						.transform(rotate(120deg));
+					}
+					&:after {
+						top: -@top;
+						left: -@left;
+						.transform(rotate(60deg));
+					}
+				}
+
+
+				&, &:before, &:after {
+					content: '';
+					position: absolute;
+					height: @height;
+					width: @width;
+					background-color: @icon-color;
+				}
+			}
+		}
+
 
 		.@{prefix}progress-container {
 			@total-button-width: @control-height;
 			position: relative;
-			width: @total-width - (@time-width + (@control-height * 4));
+			width: @total-width - (@time-width + (@control-height * 5));
 
 			@progress-height: (@control-size * 0.5);
 			.@{prefix}progress, .@{prefix}progress-buffered, .@{prefix}progress-well {
