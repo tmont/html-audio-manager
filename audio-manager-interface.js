@@ -105,6 +105,10 @@
 					$(this).toggleClass(prefix + 'active');
 				});
 
+			var $optionsContainer = $('<div/>')
+				.addClass(prefix + 'options-container')
+				.appendTo(this.controls.$options);
+
 			this.controls.$volume = $('<div/>')
 				.addClass(prefix + 'volume' + btn + control)
 				.appendTo($controlContainer)
