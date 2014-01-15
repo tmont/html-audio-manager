@@ -1,6 +1,6 @@
 (function(window, document, $) {
 
-	var prefix = 'audio-manager-';
+	var prefix = 'rach3-';
 
 	function AudioManagerInterface($element, options) {
 		if (!options || typeof(options) !== 'object') {
@@ -8,7 +8,7 @@
 		}
 
 		if (!options.manager) {
-			throw new Error('An AudioManager must be passed to rach3');
+			throw new Error('options.manager must be set to an instance of rach3.AudioManager');
 		}
 
 		var self = this;

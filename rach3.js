@@ -284,7 +284,9 @@
 		}
 	};
 
-	window.AudioFile = AudioFile;
-	window.AudioFileManager = AudioFileManager;
+	window.rach3 = {
+		AudioFile: AudioFile,
+		AudioFileManager: AudioFileManager
+	};
 
 }(window));
