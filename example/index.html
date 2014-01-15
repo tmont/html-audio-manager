@@ -13,13 +13,13 @@
 		<script type="text/javascript" src="../rach3.js"></script>
 		<script type="text/javascript" src="../jquery.rach3.js"></script>
 		<script type="text/javascript">
-			var manager = new rach3.AudioFileManager({
-				stars: new rach3.AudioFile('to-the-stars.ogg'),
-				orbit: new rach3.AudioFile('orbit.ogg'),
-				galaxy: new rach3.AudioFile('all-around-the-galaxy-cut.ogg')
+			$('#music-player').rach3({
+				manager: new rach3.AudioFileManager({
+					stars: new rach3.AudioFile('to-the-stars.ogg'),
+					orbit: new rach3.AudioFile('orbit.ogg'),
+					galaxy: new rach3.AudioFile('all-around-the-galaxy-cut.ogg')
+				})
 			});
-
-			$('#music-player').rach3({ manager: manager });
 		</script>
 	</body>
 </html>
