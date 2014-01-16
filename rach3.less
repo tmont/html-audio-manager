@@ -45,13 +45,15 @@
 	@total-width: (@size * 30);
 	@box-shadow-size: (@size * .25);
 	@box-shadow-color: fade(black, 40);
+	@control-color: lighten(@bg-color, 15%);
+	@control-border-color: darken(@control-color, 11%);
 
 	.box-shadow() {
 		box-shadow: @box-shadow-size @box-shadow-size @box-shadow-size @box-shadow-color;
 	}
 
 	font-size: @size;
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Lato', sans-serif;
 	position: relative;
 	width: @total-width;
 	.box-sizing(border-box);
@@ -60,7 +62,7 @@
 	border-radius: @radius;
 	.box-shadow();
 
-	&.@{prefix}volume-open, &.@{prefix}options-open {
+	&.@{prefix}volume-open, &.@{prefix}options-open, &.@{prefix}showing-playlist {
 		&, .@{prefix}control-container {
 			border-bottom-right-radius: 0;
 			.@{prefix}control:last-child {
@@ -103,8 +105,7 @@
 		@icon-transparent: fade(@icon-color, 0);
 		@button-padding: (@size * .25);
 		@icon-opacity: 0.8;
-		@control-color: lighten(@bg-color, 15%);
-		@control-border-color: darken(@control-color, 11%);
+
 		@control-size: 16px;
 		@control-height: (@control-size * 2.5);
 		@control-stop-color: darken(@control-color, 15%);
@@ -441,6 +442,52 @@
 				&:before {
 					content: '/';
 				}
+			}
+		}
+	}
+
+	.@{prefix}playlist {
+		clear: both;
+		border-bottom-right-radius: @radius;
+		border-bottom-left-radius: @radius;
+		border-top: 1px solid @control-border-color;
+		margin: 0;
+		padding: (@size * .5);
+		font-size: (@size * .75);
+		list-style: none;
+		li {
+			border-bottom: 1px solid lighten(@bg-color, 10%);
+			padding: (@size * .25) (@size * .5);
+			opacity: 0.8;
+			.transition(all 150ms);
+			cursor: pointer;
+
+			&:hover {
+				opacity: 1;
+			}
+			&:before {
+				content: attr(data-track) '.';
+			}
+			&:last-child {
+				border-bottom: none;
+			}
+			&.@{prefix}active {
+				font-weight: bold;
+				cursor: default;
+				opacity: 1;
+			}
+
+			.@{prefix}track-title {
+				display: inline-block;
+				margin-left: (@size * .5);
+			}
+			.@{prefix}track-info {
+				float: right;
+			}
+			.@{prefix}track-duration {
+				margin-right: (@size * .5);
+			}
+			.@{prefix}track-download {
 			}
 		}
 	}

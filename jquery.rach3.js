@@ -17,6 +17,7 @@
 		this.current = 0;
 		this.currentVolume = 1;
 		this.manager = options.manager;
+		this.showPlaylist = 'showPlaylist' in options ? !!options.showPlaylist : true;
 		this.manager.on('timeupdate', function(time, duration) {
 			self.updateTime(time, duration);
 		});
@@ -105,7 +106,7 @@
 					$(this).toggleClass(prefix + 'active');
 				});
 
-			var $optionsContainer = $('<div/>')
+			$('<div/>')
 				.addClass(prefix + 'options-container')
 				.appendTo(this.controls.$options);
 
@@ -147,22 +148,67 @@
 				self.controls['$' + button].append($('<span/>'));
 			});
 
+			this.$playlist = $();
+
+			if (this.showPlaylist && this.files.length > 1) {
+				this.$playlist = $('<ol/>').addClass(prefix + 'playlist');
+				this.$container.addClass(prefix + 'showing-playlist');
+				(function appendTrack(index) {
+					var file = self.files[index];
+					if (!file) {
+						return;
+					}
+
+					file.getMetadata(function(err, metadata) {
+						if (err) {
+							appendTrack(index + 1);
+							return;
+						}
+
+						$('<li/>')
+							.attr('data-track', index + 1)
+							.append($('<span/>').addClass(prefix + 'track-title').text(metadata.title))
+							.append($('<span/>').addClass(prefix + 'track-info')
+								.append($('<span/>').addClass(prefix + 'track-duration').text('00:00'))
+								.append($('<span/>').addClass(prefix + 'track-download').html('&darr;'))
+							)
+							.click(function() {
+								if (self.current === index) {
+									return;
+								}
+
+								self.stop();
+								self.current = index;
+								self.play();
+							})
+							.appendTo(self.$playlist);
+
+						appendTrack(index + 1);
+					});
+				}(0));
+			}
+
 			this.$container
-				.append($infoContainer, $controlContainer)
+				.append($infoContainer, $controlContainer, this.$playlist)
 				.appendTo(this.$element);
 
 			var file = this.files[this.current];
 			file.init();
 			this.updateTime(0, file.getDuration());
-			this.setInfo();
+			this.setInfo(function(err) {
+				if (!err) {
+					self.setActiveTrack();
+				}
+			});
 		},
 
-		setInfo: function() {
+		setInfo: function(callback) {
 			var file = this.files[this.current],
 				self = this;
 
 			file.getMetadata(function(err, metadata) {
 				if (err) {
+					callback && callback(err);
 					return;
 				}
 
@@ -171,6 +217,7 @@
 				metadata.track && self.info.$track.text(metadata.track);
 				metadata.artist && self.info.$artist.text(metadata.artist);
 				metadata.album && self.info.$album.text(metadata.album);
+				callback && callback();
 			});
 		},
 
@@ -225,6 +272,19 @@
 				//no loading events are sent if the audio is completely buffered
 				this.controls.$buffered.width('100%');
 			}
+
+			this.setActiveTrack();
+		},
+
+		setActiveTrack: function() {
+			var $track = this.$playlist.find('[data-track="' + (this.current + 1) + '"]');
+			if (!$track.length) {
+				return;
+			}
+
+			$track
+				.siblings().removeClass(prefix + 'active').end()
+				.addClass(prefix + 'active');
 		},
 
 		pause: function() {
