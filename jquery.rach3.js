@@ -96,19 +96,19 @@
 			this.controls.$elapsed = $('<span/>').addClass(prefix + 'time-elapsed').appendTo($timeContainer).text('');
 			this.controls.$duration = $('<span/>').addClass(prefix + 'time-duration').appendTo($timeContainer).text('');
 
-			this.controls.$options = $('<div/>')
-				.addClass(prefix + 'options' + btn + control)
-				.append($('<i/>').addClass(prefix + 'spoke1'))
-				.append($('<i/>').addClass(prefix + 'spoke2'))
-				.appendTo($controlContainer)
-				.click(function() {
-					self.$container.toggleClass(prefix + 'options-open');
-					$(this).toggleClass(prefix + 'active');
-				});
+//			this.controls.$options = $('<div/>')
+//				.addClass(prefix + 'options' + btn + control)
+//				.append($('<i/>').addClass(prefix + 'spoke1'))
+//				.append($('<i/>').addClass(prefix + 'spoke2'))
+//				.appendTo($controlContainer)
+//				.click(function() {
+//					self.$container.toggleClass(prefix + 'options-open');
+//					$(this).toggleClass(prefix + 'active');
+//				});
 
-			$('<div/>')
-				.addClass(prefix + 'options-container')
-				.appendTo(this.controls.$options);
+//			$('<div/>')
+//				.addClass(prefix + 'options-container')
+//				.appendTo(this.controls.$options);
 
 			this.controls.$volume = $('<div/>')
 				.addClass(prefix + 'volume' + btn + control)
@@ -144,7 +144,7 @@
 			this.info.$artist = $('<div/>').addClass(prefix + 'artist').appendTo($infoContainer);
 
 			var self = this;
-			[ 'play', 'prev', 'next', 'volume', 'options' ].forEach(function(button) {
+			[ 'play', 'prev', 'next', 'volume' ].forEach(function(button) {
 				self.controls['$' + button].append($('<span/>'));
 			});
 
