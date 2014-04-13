@@ -3,10 +3,31 @@
 	<head>
 		<title>Rach3 Demo</title>
 		<link rel="stylesheet" href="rach3.css"/>
+		<link rel="stylesheet" href="http://dl.sunlightjs.com/latest/themes/sunlight.default.css"/>
+		<style type="text/css">
+			#music-player {
+				float: left;
+			}
+			.sunlight-container {
+				clear: none !important;
+				margin-left: 20px !important;
+				float: left;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="music-player"></div>
+		<pre class="sunlight-highlight-javascript">
+$('#music-player').rach3({
+	manager: new rach3.AudioFileManager({
+		stars: new rach3.AudioFile('to-the-stars.ogg'),
+		orbit: new rach3.AudioFile('orbit.ogg'),
+		galaxy: new rach3.AudioFile('all-around-the-galaxy-cut.ogg')
+	})
+});</pre>
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/sunlight-min.js"></script>
+		<script type="text/javascript" src="http://dl.sunlightjs.com/latest/lang/sunlight.javascript-min.js"></script>
 		<script type="text/javascript" src="audio-metadata.min.js"></script>
 		<script type="text/javascript" src="rach3.js"></script>
 		<script type="text/javascript" src="jquery.rach3.js"></script>
@@ -17,6 +38,10 @@
 					orbit: new rach3.AudioFile('orbit.ogg'),
 					galaxy: new rach3.AudioFile('all-around-the-galaxy-cut.ogg')
 				})
+			});
+
+			Sunlight.highlightAll({
+				lineNumbers: false
 			});
 		</script>
 	</body>
