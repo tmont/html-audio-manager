@@ -93,8 +93,8 @@
 
 			$progressContainer.appendTo($controlContainer);
 			var $timeContainer = $('<div/>').addClass(prefix + 'time' + control).appendTo($controlContainer);
-			this.controls.$elapsed = $('<span/>').addClass(prefix + 'time-elapsed').appendTo($timeContainer).text('');
-			this.controls.$duration = $('<span/>').addClass(prefix + 'time-duration').appendTo($timeContainer).text('');
+			this.controls.$elapsed = $('<span/>').addClass(prefix + 'time-elapsed').appendTo($timeContainer).text('00:00');
+			this.controls.$duration = $('<span/>').addClass(prefix + 'time-duration').appendTo($timeContainer).text('00:00');
 
 //			this.controls.$options = $('<div/>')
 //				.addClass(prefix + 'options' + btn + control)
