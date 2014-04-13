@@ -1,1 +1,23 @@
-My Page
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Rach3 Demo</title>
+		<link rel="stylesheet" href="https://raw.githubusercontent.com/tmont/rach3/master/rach3.css"/>
+	</head>
+	<body>
+		<div id="music-player"></div>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script type="text/javascript" src="https://raw.githubusercontent.com/tmont/rach3/master/lib/audio-metadata.min.js"></script>
+		<script type="text/javascript" src="https://raw.githubusercontent.com/tmont/rach3/master/rach3.js"></script>
+		<script type="text/javascript" src="https://raw.githubusercontent.com/tmont/rach3/master/jquery.rach3.js"></script>
+		<script type="text/javascript">
+			$('#music-player').rach3({
+				manager: new rach3.AudioFileManager({
+					stars: new rach3.AudioFile('to-the-stars.ogg'),
+					orbit: new rach3.AudioFile('orbit.ogg'),
+					galaxy: new rach3.AudioFile('all-around-the-galaxy-cut.ogg')
+				})
+			});
+		</script>
+	</body>
+</html>
