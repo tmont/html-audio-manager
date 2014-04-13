@@ -246,7 +246,7 @@
 					seconds = Math.floor(total - (minutes * 60));
 				var node = $element[0].firstChild,
 					text = pad(minutes) + ':' + pad(seconds);
-				if (node.nodeValue === text) {
+				if (!node || node.nodeValue === text) {
 					return;
 				}
 
