@@ -1,0 +1,456 @@
+.rach3-container {
+  font-size: 16px;
+  font-family: 'Lato', sans-serif;
+  position: relative;
+  width: 480px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #ffffff;
+  background-color: #363636;
+  border-radius: 4px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+}
+.rach3-container.rach3-volume-open,
+.rach3-container.rach3-options-open,
+.rach3-container.rach3-showing-playlist,
+.rach3-container.rach3-volume-open .rach3-control-container,
+.rach3-container.rach3-options-open .rach3-control-container,
+.rach3-container.rach3-showing-playlist .rach3-control-container {
+  border-bottom-right-radius: 0;
+}
+.rach3-container.rach3-volume-open .rach3-control:last-child,
+.rach3-container.rach3-options-open .rach3-control:last-child,
+.rach3-container.rach3-showing-playlist .rach3-control:last-child,
+.rach3-container.rach3-volume-open .rach3-control-container .rach3-control:last-child,
+.rach3-container.rach3-options-open .rach3-control-container .rach3-control:last-child,
+.rach3-container.rach3-showing-playlist .rach3-control-container .rach3-control:last-child {
+  border-bottom-right-radius: 0;
+}
+.rach3-container .rach3-info-container {
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-height: 31.2px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.rach3-container .rach3-info-container:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+.rach3-container .rach3-info-container .rach3-track,
+.rach3-container .rach3-info-container .rach3-title {
+  float: left;
+  margin-right: 4px;
+}
+.rach3-container .rach3-info-container .rach3-artist,
+.rach3-container .rach3-info-container .rach3-year {
+  float: right;
+  margin-left: 4px;
+}
+.rach3-container .rach3-info-container .rach3-album,
+.rach3-container .rach3-info-container .rach3-track,
+.rach3-container .rach3-info-container .rach3-year {
+  display: none;
+}
+.rach3-container .rach3-info-container .rach3-track,
+.rach3-container .rach3-info-container .rach3-year {
+  opacity: 0.7;
+}
+.rach3-container .rach3-control-container {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top: 1px solid #404040;
+  height: 40px;
+  position: relative;
+  clear: both;
+}
+.rach3-container .rach3-control-container .rach3-btn {
+  width: 40px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  cursor: pointer;
+}
+.rach3-container .rach3-control-container .rach3-btn:active,
+.rach3-container .rach3-control-container .rach3-btn:focus,
+.rach3-container .rach3-control-container .rach3-btn.rach3-active {
+  background-color: #5c5c5c;
+  background-image: -moz-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -webkit-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -ms-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -o-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: linear-gradient(to bottom, #363636 0%, #5c5c5c 100%);
+}
+.rach3-container .rach3-control-container .rach3-btn span {
+  display: inline-block;
+}
+.rach3-container .rach3-control-container .rach3-control {
+  background-color: #363636;
+  background-image: -moz-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: -webkit-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: -ms-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: -o-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: linear-gradient(to bottom, #5c5c5c 0%, #363636 100%);
+  height: 40px;
+  float: left;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 1px solid #484848;
+  border-left: 1px solid #404040;
+}
+.rach3-container .rach3-control-container .rach3-control:first-child {
+  border-bottom-left-radius: 4px;
+  border-left: none;
+}
+.rach3-container .rach3-control-container .rach3-control:last-child {
+  border-bottom-right-radius: 4px;
+  border-right: none;
+}
+.rach3-container .rach3-control-container .rach3-play span {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: rgba(230, 230, 230, 0) rgba(230, 230, 230, 0) rgba(230, 230, 230, 0) #e6e6e6;
+  border-width: 8px 8px 8px 12px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -3.5px;
+  margin-top: -8px;
+}
+.rach3-container .rach3-control-container .rach3-pause span {
+  width: 12px;
+  height: 16px;
+  border: 4px solid #e6e6e6;
+  border-top: none;
+  border-bottom: none;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -6px;
+  margin-top: -8px;
+}
+.rach3-container .rach3-control-container .rach3-prev span {
+  border: 6px solid rgba(230, 230, 230, 0);
+  border-right: 8px solid #e6e6e6;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -4px;
+  margin-top: -6px;
+}
+.rach3-container .rach3-control-container .rach3-prev span:before {
+  content: '';
+  position: absolute;
+  background-color: #e6e6e6;
+  width: 2px;
+  height: 12px;
+  margin-left: -10px;
+  margin-top: -6px;
+}
+.rach3-container .rach3-control-container .rach3-prev span:after {
+  content: '';
+  border: 6px solid rgba(230, 230, 230, 0);
+  border-right: 8px solid #e6e6e6;
+  position: absolute;
+  margin-left: -14px;
+  margin-top: -6px;
+}
+.rach3-container .rach3-control-container .rach3-next span {
+  border: 6px solid rgba(230, 230, 230, 0);
+  border-left: 8px solid #e6e6e6;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -9px;
+  margin-top: -6px;
+}
+.rach3-container .rach3-control-container .rach3-next span:before {
+  content: '';
+  position: absolute;
+  background-color: #e6e6e6;
+  width: 2px;
+  height: 12px;
+  margin-left: 8px;
+  margin-top: -6px;
+}
+.rach3-container .rach3-control-container .rach3-next span:after {
+  content: '';
+  position: absolute;
+  border: 6px solid rgba(230, 230, 230, 0);
+  border-left: 8px solid #e6e6e6;
+  margin-top: -6px;
+}
+.rach3-container .rach3-control-container .rach3-volume {
+  overflow: visible;
+}
+.rach3-container .rach3-control-container .rach3-volume.rach3-active .rach3-volume-control {
+  display: block;
+}
+.rach3-container .rach3-control-container .rach3-volume .rach3-volume-control {
+  display: none;
+  position: absolute;
+  width: 80px;
+  right: -80px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 0;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+  cursor: default;
+  background-color: #5c5c5c;
+  background-image: -moz-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -webkit-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -ms-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: -o-linear-gradient(top, #363636 0%, #5c5c5c 100%);
+  background-image: linear-gradient(to bottom, #363636 0%, #5c5c5c 100%);
+}
+.rach3-container .rach3-control-container .rach3-volume .rach3-volume-control input[type="range"] {
+  width: 95%;
+  margin: 0;
+  margin-top: 8px;
+}
+.rach3-container .rach3-control-container .rach3-volume span {
+  width: 8px;
+  height: 8px;
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -4px;
+  margin-left: -8px;
+}
+.rach3-container .rach3-control-container .rach3-volume span:after {
+  content: '';
+  position: absolute;
+  border: 8px solid rgba(230, 230, 230, 0);
+  border-right: 12px solid #e6e6e6;
+  margin-left: -8px;
+  margin-top: -4px;
+}
+.rach3-container .rach3-control-container .rach3-volume span:before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border: 4px double #e6e6e6;
+  border-bottom: none;
+  border-left: none;
+  border-radius: 0 50px 0 0;
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  margin-left: 12px;
+}
+.rach3-container .rach3-control-container .rach3-options {
+  overflow: visible;
+}
+.rach3-container .rach3-control-container .rach3-options.rach3-active .rach3-options-container {
+  display: block;
+}
+.rach3-container .rach3-control-container .rach3-options .rach3-options-container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: -41px;
+  width: 120px;
+  height: 40px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  background-color: #363636;
+  background-image: -moz-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: -webkit-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: -ms-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: -o-linear-gradient(top, #5c5c5c 0%, #363636 100%);
+  background-image: linear-gradient(to bottom, #5c5c5c 0%, #363636 100%);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+}
+.rach3-container .rach3-control-container .rach3-options span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -9px;
+  margin-left: -9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9px;
+  border: 6px solid #e6e6e6;
+}
+.rach3-container .rach3-control-container .rach3-options i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -3px;
+}
+.rach3-container .rach3-control-container .rach3-options i,
+.rach3-container .rach3-control-container .rach3-options i:before,
+.rach3-container .rach3-control-container .rach3-options i:after {
+  content: '';
+  position: absolute;
+  height: 3px;
+  width: 6px;
+  background-color: #e6e6e6;
+}
+.rach3-container .rach3-control-container .rach3-options i.rach3-spoke1 {
+  margin-top: -11px;
+}
+.rach3-container .rach3-control-container .rach3-options i.rach3-spoke1:before {
+  top: 5px;
+  left: -9px;
+  -moz-transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  transform: rotate(120deg);
+}
+.rach3-container .rach3-control-container .rach3-options i.rach3-spoke1:after {
+  top: 5px;
+  left: 9px;
+  -moz-transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+  -o-transform: rotate(60deg);
+  transform: rotate(60deg);
+}
+.rach3-container .rach3-control-container .rach3-options i.rach3-spoke2 {
+  margin-top: 8px;
+}
+.rach3-container .rach3-control-container .rach3-options i.rach3-spoke2:before {
+  top: -5px;
+  left: 9px;
+  -moz-transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  transform: rotate(120deg);
+}
+.rach3-container .rach3-control-container .rach3-options i.rach3-spoke2:after {
+  top: -5px;
+  left: -9px;
+  -moz-transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+  -o-transform: rotate(60deg);
+  transform: rotate(60deg);
+}
+.rach3-container .rach3-control-container .rach3-progress-container {
+  position: relative;
+  width: 224px;
+}
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress,
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress-buffered,
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress-well {
+  height: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress-well {
+  margin-top: -5px;
+  height: 8px;
+  position: absolute;
+  top: 50%;
+  background-color: #3b3b3b;
+  background-image: -moz-linear-gradient(top, #484848 0%, #3b3b3b 100%);
+  background-image: -webkit-linear-gradient(top, #484848 0%, #3b3b3b 100%);
+  background-image: -ms-linear-gradient(top, #484848 0%, #3b3b3b 100%);
+  background-image: -o-linear-gradient(top, #484848 0%, #3b3b3b 100%);
+  background-image: linear-gradient(to bottom, #484848 0%, #3b3b3b 100%);
+  border: 1px solid #767676;
+  width: 95%;
+  margin-left: 2.5%;
+}
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress,
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress-buffered {
+  width: 0;
+  -moz-transition: width 280ms linear;
+  -webkit-transition: width 280ms linear;
+  transition: width 280ms linear;
+}
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress {
+  background-color: #cccccc;
+  background-image: -moz-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: -webkit-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: -ms-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: -o-linear-gradient(top, #e6e6e6 0%, #cccccc 100%);
+  background-image: linear-gradient(to bottom, #e6e6e6 0%, #cccccc 100%);
+}
+.rach3-container .rach3-control-container .rach3-progress-container .rach3-progress-buffered {
+  background-color: #555555;
+  background-image: -moz-linear-gradient(top, #616161 0%, #555555 100%);
+  background-image: -webkit-linear-gradient(top, #616161 0%, #555555 100%);
+  background-image: -ms-linear-gradient(top, #616161 0%, #555555 100%);
+  background-image: -o-linear-gradient(top, #616161 0%, #555555 100%);
+  background-image: linear-gradient(to bottom, #616161 0%, #555555 100%);
+}
+.rach3-container .rach3-control-container .rach3-time {
+  width: 96px;
+  color: #e6e6e6;
+  font-family: Consolas, Inconsolata, Monaco, monospace;
+  font-size: 12px;
+  text-align: center;
+  height: 100%;
+  line-height: 40px;
+  text-shadow: 0.8px 0.8px 1.6px rgba(230, 230, 230, 0.5);
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+.rach3-container .rach3-control-container .rach3-time .rach3-time-duration {
+  opacity: 0.5;
+}
+.rach3-container .rach3-control-container .rach3-time .rach3-time-duration:before {
+  content: '/';
+}
+.rach3-container .rach3-playlist {
+  clear: both;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top: 1px solid #404040;
+  margin: 0;
+  padding: 8px;
+  font-size: 12px;
+  list-style: none;
+}
+.rach3-container .rach3-playlist li {
+  border-bottom: 1px solid #505050;
+  padding: 4px 8px;
+  opacity: 0.8;
+  -moz-transition: all 150ms;
+  -webkit-transition: all 150ms;
+  transition: all 150ms;
+  cursor: pointer;
+}
+.rach3-container .rach3-playlist li:hover {
+  opacity: 1;
+}
+.rach3-container .rach3-playlist li:before {
+  content: attr(data-track) '.';
+}
+.rach3-container .rach3-playlist li:last-child {
+  border-bottom: none;
+}
+.rach3-container .rach3-playlist li.rach3-active {
+  font-weight: bold;
+  cursor: default;
+  opacity: 1;
+}
+.rach3-container .rach3-playlist li .rach3-track-title {
+  display: inline-block;
+  margin-left: 8px;
+}
+.rach3-container .rach3-playlist li .rach3-track-info {
+  float: right;
+}
+.rach3-container .rach3-playlist li .rach3-track-duration {
+  margin-right: 8px;
+}
